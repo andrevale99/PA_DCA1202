@@ -1,11 +1,12 @@
+#include <iostream>
+#include <cmath>
+
 #include "Poly.hpp"
 
 int main(int argc, char *argv[]){
-	Poly p1(3);
-	
-	//double pol[] = {5.7, 1.4 ,3.2 ,0.2};
+	Poly p1(2);
 
-	std::cout << p1 << '\n' << p1[3] << '\n';
+	std::cout << p1(1.5) << '\n';
 
 	return 0;
 }

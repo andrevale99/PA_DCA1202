@@ -17,8 +17,9 @@ Poly::Poly(uint grau)
 	D = grau + 1;
 	a = new double[D];
 
-	for (int i = 0; i < getGrau() + 1; ++i)
-		a[i] = i + 1;
+	a[0] = 6.2;
+	a[1] = 5;
+	a[2] = 3;
 }
 
 /**
@@ -76,8 +77,21 @@ int Poly::getGrau() const
 */
 double Poly::getCoef(uint index) const
 {
-	if(index >= D) return 0;
+	if (index >= D)
+		return 0;
 	return a[index];
+}
+
+/**
+ * 
+*/
+double Poly::getValor(double valor)
+{
+	double total = 0;
+	for(int i=getGrau(); i>=0; --i){
+		total += a[i]*pow(valor, i);
+	}
+	return total;
 }
 
 //========================OVERLOADS====================================
@@ -91,8 +105,21 @@ double Poly::getCoef(uint index) const
 */
 double Poly::operator[](uint index)
 {
-	if(index >= D) return 0;
+	if (index >= D)
+		return 0;
 	return a[index];
+}
+
+/**
+ * 
+*/
+double Poly::operator()(double valor)
+{
+	double total = 0;
+	for(int i=getGrau(); i>=0; --i){
+		total += a[i]*pow(valor, i);
+	}
+	return total;
 }
 
 /**
@@ -107,21 +134,40 @@ std::ostream &operator<<(std::ostream &out, Poly &pl)
 {
 	for (int i = pl.getGrau(); i >= 0; --i)
 	{
-		if (pl.a[i] >= 0)
-			out << '+';
-		else
-			out << '-';
 
-		if (i == 0)
+		if (pl.a[i] == 0.0)
 		{
-			out << pl.a[i];
-			break;
+			if (i == 0 && pl.getGrau() == 0)
+			{
+				out << pl.a[i];
+			}
+		}
+		else
+		{
+			if (pl.a[i] < 0.0)
+				out << '-';
+			else if (i != pl.getGrau())
+				out << '+';
+
+			if (abs(pl.a[i]) != 1.0 || i == 0)
+				out << abs(pl.a[i]);
+
+			if (i != 0)
+			{
+				if (abs(pl.a[i]) != 1.0)
+					out << '*';
+
+				out << 'x';
+
+				if (i > 1)
+				{
+					out << '^';
+					out << i;
+				}
+			}
 		}
 
-		out << pl.a[i] << "*x^" << i;
-	}
-
-	out << '\n';
+	}//FIM LOOP FOR
 
 	return out;
 }
