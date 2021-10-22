@@ -20,6 +20,9 @@ public:
 	bool isZero() const;
 
 	int getGrau() const;
+	double getCoef(uint index) const;
+
+	double operator[](uint index);
 
 private:
 	unsigned D; //Váriável que armazena a dimensão do poli.

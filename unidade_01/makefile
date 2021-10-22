@@ -10,6 +10,7 @@ all: $(OUT)
 
 $(OUT): $(TESTE)
 	$(GCC) $(FLAGS) $(TESTE) -o $(OUT)
+	@echo "";
 
 clear: 
 	@rm $(OUT)
