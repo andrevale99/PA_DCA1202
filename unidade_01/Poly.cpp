@@ -68,18 +68,13 @@ int Poly::getGrau() const
 }
 
 /**
+ * @brief Retorna o valor do coeficiente do grau
  * 
+ * @param index--> Índice do coeficiente
+ * 
+ * @return valor do coeficiente
 */
 double Poly::getCoef(uint index) const
-{
-	if(index >= D) return 0;
-	return a[index];
-}
-
-/**
- * 
-*/
-double Poly::operator[](uint index)
 {
 	if(index >= D) return 0;
 	return a[index];
@@ -88,9 +83,25 @@ double Poly::operator[](uint index)
 //========================OVERLOADS====================================
 
 /**
+ * @brief Overload para acessar o valor do coeficiente (mesmo que getCoef())
+ * 
+ * @param index--> Índice do coeficiente
+ * 
+ * @return valor do coeficiente
+*/
+double Poly::operator[](uint index)
+{
+	if(index >= D) return 0;
+	return a[index];
+}
+
+/**
  *	@brief Mostra o polinômio da maneira padrão (std::cout << Poly)
  *
- * @return Mensagem padrão do polinômio
+ * 	@param out--> ostream
+ * 	@param pl--> Objeto criado
+ * 
+ *  @return Mensagem padrão do polinômio
  */
 std::ostream &operator<<(std::ostream &out, Poly &pl)
 {
