@@ -1,12 +1,22 @@
 #include <iostream>
 #include <cmath>
+#include <cstring>
 
 #include "Poly.hpp"
 
-int main(int argc, char *argv[]){
-	Poly p1(2);
+using namespace std;
 
-	std::cout << p1(1.5) << '\n';
+string arq1 = "poly_P1.txt";
+string arq2 = "poly_P2.txt";
+
+int main(int argc, char *argv[]){
+	Poly p(3);
+
+	cin >> p;
+
+	cout << p;
+
+	
 
 	return 0;
 }
