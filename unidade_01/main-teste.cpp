@@ -15,6 +15,11 @@ int main(int argc, char *argv[]){
 	cin >> p;
 
 	cout << p;
+	cout << '\n';
+
+	p.recriar(2);
+	cout << p;
+	cout <<'\n';
 
 	
 
