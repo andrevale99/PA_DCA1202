@@ -46,7 +46,16 @@ void Poly::recriar(uint grau)
 		D = grau + 1;
 		double *prov = new double[grau + 1];
 
-		for (int i = 0; i < getGrau(); ++i)
+		for (int i = 0; i < getGrau()+1; ++i)
+		{
+			prov[i] = a[i];
+		}
+
+		delete[] a;
+
+		a = new double[grau + 1];
+
+		for (int i = 0; i < getGrau()+1; ++i)
 		{
 			a[i] = prov[i];
 		}
@@ -110,7 +119,7 @@ double Poly::getCoef(uint index) const
 /**
  *
  */
-double Poly::getValor(double valor) const 
+double Poly::getValor(double valor) const
 {
 	double total = 0;
 	for (int i = getGrau(); i >= 0; --i)
@@ -252,7 +261,7 @@ Poly Poly::operator+(const Poly &poly) const
  *
  *  @return Mensagem padrão do polinômio
  */
-std::ostream& operator<<(std::ostream &out, Poly &pl)
+std::ostream &operator<<(std::ostream &out, Poly &pl)
 {
 	for (int i = pl.getGrau(); i >= 0; --i)
 	{
@@ -294,9 +303,9 @@ std::ostream& operator<<(std::ostream &out, Poly &pl)
 	return out;
 }
 
-std::istream& operator>>(std::istream &in, Poly &pl)
+std::istream &operator>>(std::istream &in, Poly &pl)
 {
-	std::cout<< pl.getGrau() << '\n';
+	std::cout << pl.getGrau() << '\n';
 	for (int i = pl.getGrau(); i >= 0; --i)
 	{
 		std::cout << "x^" << i << ": ";
