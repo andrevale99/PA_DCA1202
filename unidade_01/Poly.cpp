@@ -50,6 +50,8 @@ void Poly::recriar(uint grau)
 		{
 			a[i] = prov[i];
 		}
+
+		delete[] prov;
 	}
 }
 
