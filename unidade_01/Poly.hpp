@@ -42,6 +42,9 @@ public:
 	double operator[](uint index);
 	double operator()(double valor);
 	Poly operator+(const Poly &poly) const;
+	Poly operator-(const Poly &poly) const;
+	Poly operator-() const;
+	Poly operator*(const Poly &poly) const;
 
 	bool salvar(string nome_arq);
 	bool ler(string nome_arq);

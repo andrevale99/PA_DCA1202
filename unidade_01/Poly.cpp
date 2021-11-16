@@ -46,16 +46,17 @@ void Poly::recriar(uint grau)
 		D = grau + 1;
 		double *prov = new double[grau + 1];
 
-		for (int i = 0; i < getGrau() + 1; ++i)
+		for (int i = 0; i < getGrau(); ++i)
 		{
-			prov[i] = a[i];
+			prov[i] = 0.;
 		}
+		prov[getGrau()] = 1.0;
 
 		delete[] a;
 
 		a = new double[grau + 1];
 
-		for (int i = 0; i < getGrau() + 1; ++i)
+		for (int i = 0; i < D; ++i)
 		{
 			a[i] = prov[i];
 		}
@@ -98,13 +99,13 @@ bool Poly::isZero() const
  */
 void Poly::setCoef(uint index, float num)
 {
-	if(index < 0 || index > getGrau())
+	if (index < 0 || index > getGrau())
 		std::cerr << "Indice Invalido\n";
-	
-	else if(index == getGrau() && num == 0.)
+
+	else if (index == getGrau() && num == 0.)
 		std::cerr << "Coeficiente Invalido\n";
 
-	else if(getGrau() == 0)
+	else if (getGrau() == 0)
 		a[0] = num;
 
 	else
@@ -269,14 +270,87 @@ double Poly::operator()(double valor)
 	return total;
 }
 
+/**
+ * @brief Sobrecarrega o + para soma de polinômios
+ * 
+ * @param poly 
+ * @return Poly 
+ */
 Poly Poly::operator+(const Poly &poly) const
 {
-	Poly prov;
 
 	if (poly.empty() || poly.isZero())
 		return *this;
+
 	else if (this->empty() || this->isZero())
 		return poly;
+
+	else
+	{
+		uint aux_D = -1;
+
+		if (D > poly.D)
+			aux_D = D;
+		else
+			aux_D = poly.D;
+
+		Poly prov(aux_D);
+	}
+}
+
+/**
+ * @brief Sobrecarrega o - para subtração de polinômios
+ * 
+ * @param poly 
+ * @return Poly 	
+*/
+Poly Poly::operator-(const Poly &poly) const
+{
+
+	Poly prov(poly.D);
+
+	if (poly.empty() || poly.isZero())
+		return *this;
+
+	else if (this->empty() || this->isZero())
+	{
+		for (uint i = 0; i < poly.D; ++i)
+		{
+			prov.a[i] = -poly.a[i];
+		}
+		return prov;
+	}
+
+	else
+	{
+		uint aux_D = -1;
+
+		if (D > poly.D)
+			aux_D = D;
+		else
+			aux_D = poly.D;
+
+		prov.recriar(aux_D);
+	}
+}
+
+Poly Poly::operator-() const
+{
+	if (this->empty())
+		return this->empty();
+
+	else if (this->isZero())
+		return this->isZero();
+}
+
+/**
+ * @brief Multiplicação de Polinômios
+ * 
+ * @param poly 
+ * @return Poly 
+ */
+Poly Poly::operator*(const Poly &poly) const
+{
 }
 
 /**
