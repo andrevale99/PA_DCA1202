@@ -46,7 +46,7 @@ void Poly::recriar(uint grau)
 		D = grau + 1;
 		double *prov = new double[grau + 1];
 
-		for (int i = 0; i < getGrau()+1; ++i)
+		for (int i = 0; i < getGrau() + 1; ++i)
 		{
 			prov[i] = a[i];
 		}
@@ -55,7 +55,7 @@ void Poly::recriar(uint grau)
 
 		a = new double[grau + 1];
 
-		for (int i = 0; i < getGrau()+1; ++i)
+		for (int i = 0; i < getGrau() + 1; ++i)
 		{
 			a[i] = prov[i];
 		}
@@ -93,6 +93,25 @@ bool Poly::isZero() const
 }
 
 /**
+ * @brief 
+ * 
+ */
+void Poly::setCoef(uint index, float num)
+{
+	if(index < 0 || index > getGrau())
+		std::cerr << "Indice Invalido\n";
+	
+	else if(index == getGrau() && num == 0.)
+		std::cerr << "Coeficiente Invalido\n";
+
+	else if(getGrau() == 0)
+		a[0] = num;
+
+	else
+		a[index] = num;
+}
+
+/**
  * @brief Adquire o grau dopolinômio
  *
  * @return grau do polinômio
@@ -122,10 +141,17 @@ double Poly::getCoef(uint index) const
 double Poly::getValor(double valor) const
 {
 	double total = 0;
-	for (int i = getGrau(); i >= 0; --i)
+	if (empty())
+		total = 0;
+
+	else
 	{
-		total += a[i] * pow(valor, i);
+		for (int i = getGrau(); i >= 0; --i)
+		{
+			total += a[i] * pow(valor, i);
+		}
 	}
+
 	return total;
 }
 
@@ -139,7 +165,7 @@ bool Poly::salvar(string nome_arq)
 {
 	std::ofstream save(nome_arq, std::ios::out);
 
-	save << "POLY" << ' ' << D << ' ';
+	save << "POLY" << ' ' << D << '\n';
 
 	for (uint i = 0; i < D; ++i)
 	{

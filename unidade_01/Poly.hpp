@@ -32,6 +32,8 @@ public:
 	bool empty() const;
 	bool isZero() const;
 
+	void setCoef(uint index, float num);
+
 	int getGrau() const;
 	double getCoef(uint index) const;
 	
