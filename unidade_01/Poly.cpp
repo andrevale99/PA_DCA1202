@@ -290,10 +290,38 @@ Poly Poly::operator+(const Poly &poly) const
 
 	else
 	{
+		if(getGrau() == poly.getGrau())
+		{
+			Poly prov(getGrau());
+			for(uint i=0; i<poly.D; ++i)
+				prov.a[i] = this->a[i] + poly.a[i];
 
-		Poly prov(0);
-		prov.recriar(getGrau());
-		return prov;
+			return prov;
+
+		}
+
+		else if (getGrau() > poly.getGrau())
+		{
+			Poly prov;
+			prov = (*this);
+
+			for(uint i=0; i<poly.D; ++i)
+				prov.a[i] = this->a[i] + poly.a[i];
+
+			return prov;
+
+		}
+
+		else
+		{
+			Poly prov;
+			prov = poly;
+
+			for(uint i=0; i<this->D; ++i)
+				prov.a[i] = this->a[i] + poly.a[i];
+
+			return prov;
+		}
 	
 	}
 }
@@ -323,16 +351,40 @@ Poly Poly::operator-(const Poly &poly) const
 
 	else
 	{
-		uint aux_D = -1;
+		if(getGrau() == poly.getGrau())
+		{
+			Poly prov(getGrau());
+			for(uint i=0; i<poly.D; ++i)
+				prov.a[i] = this->a[i] - poly.a[i];
 
-		if (D > poly.D)
-			aux_D = D;
+			return prov;
+
+		}
+
+		else if (getGrau() > poly.getGrau())
+		{
+			Poly prov;
+			prov = (*this);
+
+			for(uint i=0; i<poly.D; ++i)
+				prov.a[i] = this->a[i] - poly.a[i];
+
+			return prov;
+
+		}
+
 		else
-			aux_D = poly.D;
+		{
+			Poly prov;
 
-		prov.recriar(aux_D);
+			prov = poly;
+			prov = -prov;
 
-		return prov;
+			for(uint i=0; i<this->D; ++i)
+				prov.a[i] = this->a[i] - poly.a[i];
+
+			return prov;
+		}
 	}
 }
 

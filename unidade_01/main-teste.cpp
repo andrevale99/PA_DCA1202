@@ -55,9 +55,9 @@ int main(int argc, char *argv[])
 	cout << endl;
 	cout << "P1:     " << P1 << printGrau(P1) << endl;
 
-	P1 = P1+P2;
+	Result = (P2 - P1) + P2;
 	cout << endl;
-	cout << "P1:     " << P1 << printGrau(P1) << endl;
+	cout << "P1:     " << Result << printGrau(Result) << endl;
 
 	return 0;
 }
