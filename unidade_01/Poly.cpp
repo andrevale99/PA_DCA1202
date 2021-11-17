@@ -1,4 +1,4 @@
-#include "Poly.hpp"
+#include "Poly.h"
 
 /**
  * @brief Construtor Padrão
@@ -18,13 +18,22 @@ Poly::Poly(uint grau)
 	a = new double[D];
 }
 
+Poly::Poly(const Poly &poly)
+{
+	D = poly.D;
+	a = new double[D];
+
+	for (uint i = 0; i < D; ++i)
+		a[i] = poly.a[i];
+}
+
 /**
  * @brief Destrutor padrão
  */
 Poly::~Poly()
 {
 	D = -1;
-	delete[] a;
+	//delete[] a;
 }
 
 /**
@@ -35,6 +44,7 @@ void Poly::recriar(uint grau)
 	if (grau == 0)
 	{
 		delete[] a;
+		a = nullptr;
 
 		D = grau + 1;
 		a = new double[grau + 1];
@@ -43,25 +53,18 @@ void Poly::recriar(uint grau)
 	}
 	else
 	{
+		delete[] a;
+		a = nullptr;
+
 		D = grau + 1;
-		double *prov = new double[grau + 1];
+		a = new double[grau + 1];
 
 		for (int i = 0; i < getGrau(); ++i)
 		{
-			prov[i] = 0.;
+			a[i] = 0.;
 		}
-		prov[getGrau()] = 1.0;
+		a[getGrau()] = 1;
 
-		delete[] a;
-
-		a = new double[grau + 1];
-
-		for (int i = 0; i < D; ++i)
-		{
-			a[i] = prov[i];
-		}
-
-		delete[] prov;
 	}
 }
 
@@ -287,14 +290,11 @@ Poly Poly::operator+(const Poly &poly) const
 
 	else
 	{
-		uint aux_D = -1;
 
-		if (D > poly.D)
-			aux_D = D;
-		else
-			aux_D = poly.D;
-
-		Poly prov(aux_D);
+		Poly prov(0);
+		prov.recriar(getGrau());
+		return prov;
+	
 	}
 }
 
@@ -331,16 +331,50 @@ Poly Poly::operator-(const Poly &poly) const
 			aux_D = poly.D;
 
 		prov.recriar(aux_D);
+
+		return prov;
 	}
 }
 
 Poly Poly::operator-() const
 {
+
 	if (this->empty())
-		return this->empty();
+		return Poly();
 
 	else if (this->isZero())
-		return this->isZero();
+		return Poly(0);
+
+	Poly prov(this->getGrau());
+	for (uint i = 0; i < prov.D; ++i)
+	{
+		prov.a[i] = -1 * (this->a[i]);
+	}
+	return prov;
+}
+
+void Poly::operator=(const Poly &poly)
+{
+	if (this != &poly)
+	{
+		if (this->D != poly.D)
+		{
+			delete[] a;
+
+			D = poly.D;
+
+			a = new double[D];
+
+			for (uint i = 0; i < D; ++i)
+				this->a[i] = poly.a[i];
+		}
+
+		else if (this->D == poly.D)
+		{
+			for (uint i = 0; i < D; ++i)
+				this->a[i] = poly.a[i];
+		}
+	}
 }
 
 /**
