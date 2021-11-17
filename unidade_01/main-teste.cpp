@@ -41,23 +41,10 @@ int main(int argc, char *argv[])
 	cout << "P2:     " << P2 << printGrau(P2) << endl;
 	cout << "Result: " << Result << printGrau(Result) << endl;
 
-	Poly prov(Result);
-	Result = P2;
-	P2 = P1;
-	P1 = prov;
-
+	Result = P1*P2;
 	cout << endl;
-	cout << "P1:     " << P1 << printGrau(P1) << endl;
-	cout << "P2:     " << P2 << printGrau(P2) << endl;
 	cout << "Result: " << Result << printGrau(Result) << endl;
 
-	P1 = -P1;
-	cout << endl;
-	cout << "P1:     " << P1 << printGrau(P1) << endl;
-
-	Result = (P2 - P1) + P2;
-	cout << endl;
-	cout << "P1:     " << Result << printGrau(Result) << endl;
 
 	return 0;
 }

@@ -64,7 +64,6 @@ void Poly::recriar(uint grau)
 			a[i] = 0.;
 		}
 		a[getGrau()] = 1;
-
 	}
 }
 
@@ -290,14 +289,13 @@ Poly Poly::operator+(const Poly &poly) const
 
 	else
 	{
-		if(getGrau() == poly.getGrau())
+		if (getGrau() == poly.getGrau())
 		{
 			Poly prov(getGrau());
-			for(uint i=0; i<poly.D; ++i)
+			for (uint i = 0; i < poly.D; ++i)
 				prov.a[i] = this->a[i] + poly.a[i];
 
 			return prov;
-
 		}
 
 		else if (getGrau() > poly.getGrau())
@@ -305,11 +303,10 @@ Poly Poly::operator+(const Poly &poly) const
 			Poly prov;
 			prov = (*this);
 
-			for(uint i=0; i<poly.D; ++i)
+			for (uint i = 0; i < poly.D; ++i)
 				prov.a[i] = this->a[i] + poly.a[i];
 
 			return prov;
-
 		}
 
 		else
@@ -317,12 +314,11 @@ Poly Poly::operator+(const Poly &poly) const
 			Poly prov;
 			prov = poly;
 
-			for(uint i=0; i<this->D; ++i)
+			for (uint i = 0; i < this->D; ++i)
 				prov.a[i] = this->a[i] + poly.a[i];
 
 			return prov;
 		}
-	
 	}
 }
 
@@ -351,14 +347,13 @@ Poly Poly::operator-(const Poly &poly) const
 
 	else
 	{
-		if(getGrau() == poly.getGrau())
+		if (getGrau() == poly.getGrau())
 		{
 			Poly prov(getGrau());
-			for(uint i=0; i<poly.D; ++i)
+			for (uint i = 0; i < poly.D; ++i)
 				prov.a[i] = this->a[i] - poly.a[i];
 
 			return prov;
-
 		}
 
 		else if (getGrau() > poly.getGrau())
@@ -366,11 +361,10 @@ Poly Poly::operator-(const Poly &poly) const
 			Poly prov;
 			prov = (*this);
 
-			for(uint i=0; i<poly.D; ++i)
+			for (uint i = 0; i < poly.D; ++i)
 				prov.a[i] = this->a[i] - poly.a[i];
 
 			return prov;
-
 		}
 
 		else
@@ -380,7 +374,7 @@ Poly Poly::operator-(const Poly &poly) const
 			prov = poly;
 			prov = -prov;
 
-			for(uint i=0; i<this->D; ++i)
+			for (uint i = 0; i < this->D; ++i)
 				prov.a[i] = this->a[i] - poly.a[i];
 
 			return prov;
@@ -437,6 +431,20 @@ void Poly::operator=(const Poly &poly)
  */
 Poly Poly::operator*(const Poly &poly) const
 {
+	if ((this->empty() && poly.isZero()) || (this->isZero() && poly.empty()))
+		return Poly();
+
+	else if ((this->empty() && poly.getGrau() > 0) || (this->getGrau() > 0 && poly.empty()))
+		return Poly();
+
+	else if ((this->getGrau() > 0 && poly.isZero()) || (this->isZero() && poly.getGrau() > 0))
+		return Poly(0);
+
+	else
+	{
+		uint grau_final = this->getGrau() + poly.getGrau();
+		std::cout << grau_final << '\n';
+	}
 }
 
 /**
