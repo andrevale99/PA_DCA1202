@@ -16,6 +16,12 @@ Poly::Poly(uint grau)
 {
 	D = grau + 1;
 	a = new double[D];
+
+	for (int i = 0; i < getGrau(); ++i)
+	{
+		a[i] = 0.;
+	}
+	a[getGrau()] = 1.;
 }
 
 Poly::Poly(const Poly &poly)
@@ -442,8 +448,21 @@ Poly Poly::operator*(const Poly &poly) const
 
 	else
 	{
-		uint grau_final = this->getGrau() + poly.getGrau();
-		std::cout << grau_final << '\n';
+		// x^2 * x^2 = x^4
+
+		uint grau = getGrau() + poly.getGrau();
+		Poly prov(grau);
+
+		for (uint i = 0; i < this->D; ++i)
+		{
+			for (uint j = 0; j < poly.D; ++j)
+			{
+				prov.a[i + j] += a[i] * poly.a[j];
+				std::cout << prov.a[i] << '\t' << a[i] << ',' << poly.a[i] << '\n';
+			}
+		}
+
+		return prov;
 	}
 }
 
