@@ -1,5 +1,6 @@
 #include "Poly.h"
 
+
 /**
  * @brief Construtor Padrão
  */
@@ -39,7 +40,7 @@ Poly::Poly(const Poly &poly)
 Poly::~Poly()
 {
 	D = -1;
-	//delete[] a;
+	delete[] a;
 }
 
 /**
@@ -300,6 +301,7 @@ double Poly::operator()(double valor)
  * 
  * @param poly 
  * @return Poly 
+ * 
  */
 Poly Poly::operator+(const Poly &poly) const
 {
@@ -534,9 +536,12 @@ std::ostream &operator<<(std::ostream &out, Poly &pl)
 
 std::istream &operator>>(std::istream &in, Poly &pl)
 {
+
 	if (pl.empty())
 	{
+		std::cerr << "Polinomio VAZIO\n";
 	}
+
 	else
 	{
 		std::cout << pl.getGrau() << '\n';
@@ -544,13 +549,13 @@ std::istream &operator>>(std::istream &in, Poly &pl)
 		{
 			std::cout << "x^" << i << ": ";
 			in >> pl.a[i];
-			if(i == pl.getGrau() && pl.a[i]==0.)
+			if (i == pl.getGrau() && pl.getGrau() !=0 && pl.a[i] == 0. && !(pl.empty()))
 			{
-				do{
+				do
+				{
 					in >> pl.a[i];
-				}while(pl.a[i]==0);
+				} while (pl.a[i] == 0);
 			}
-			
 		}
 	}
 
