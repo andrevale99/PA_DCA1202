@@ -215,14 +215,16 @@ bool Poly::ler(string nome_arq)
 	arq_ler >> poly;
 	arq_ler >> D;
 
+	double *aux = new double[D];
+
 	if (poly == "POLY")
 	{
 
-		a = new double[D];
+		//a = new double[D];
 
 		for (uint i = 0; i < D; ++i)
 		{
-			if (arq_ler.eof())
+			if (arq_ler.eof() && i <= D - 1)
 			{
 				arq_ler.close();
 
@@ -230,10 +232,22 @@ bool Poly::ler(string nome_arq)
 
 				break;
 			}
-			arq_ler >> a[i];
+			//arq_ler >> a[i];
+			arq_ler >> aux[i];
 		}
 
-		teste = true;
+		if (aux[getGrau()] == 0.)
+		{
+			teste = false;
+		}
+
+		else
+		{
+			a = new double[D];
+			for (uint i = 0; i < D; ++i)
+				a[i] = aux[i];
+			teste = true;
+		}
 	}
 	else if (poly != "POLY" || D < 0)
 	{
@@ -241,6 +255,9 @@ bool Poly::ler(string nome_arq)
 
 		teste = false;
 	}
+
+	//arq_ler.close();
+	delete[] aux;
 
 	return teste;
 }
@@ -458,7 +475,6 @@ Poly Poly::operator*(const Poly &poly) const
 			for (uint j = 0; j < poly.D; ++j)
 			{
 				prov.a[i + j] += a[i] * poly.a[j];
-				std::cout << prov.a[i] << '\t' << a[i] << ',' << poly.a[i] << '\n';
 			}
 		}
 
@@ -518,11 +534,24 @@ std::ostream &operator<<(std::ostream &out, Poly &pl)
 
 std::istream &operator>>(std::istream &in, Poly &pl)
 {
-	std::cout << pl.getGrau() << '\n';
-	for (int i = pl.getGrau(); i >= 0; --i)
+	if (pl.empty())
 	{
-		std::cout << "x^" << i << ": ";
-		in >> pl.a[i];
+	}
+	else
+	{
+		std::cout << pl.getGrau() << '\n';
+		for (int i = pl.getGrau(); i >= 0; --i)
+		{
+			std::cout << "x^" << i << ": ";
+			in >> pl.a[i];
+			if(i == pl.getGrau() && pl.a[i]==0.)
+			{
+				do{
+					in >> pl.a[i];
+				}while(pl.a[i]==0);
+			}
+			
+		}
 	}
 
 	return in;

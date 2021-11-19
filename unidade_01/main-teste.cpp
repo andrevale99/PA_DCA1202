@@ -30,21 +30,29 @@ string printGrau(const Poly& P)
 int main(int argc, char *argv[])
 {
 	Poly P1;
+	
 	Poly P2(0);
+	
 	Poly Result(1);
+	cout << "P1:     " << P1 << printGrau(P1) << endl;
+	cout << "P2:     " << P2 << printGrau(P2) << endl;
+	cout << "Result: " << Result << printGrau(Result) << endl;
+	cout << endl;
 
-	P1.ler("poly_P1.txt");
-	P2.ler("poly_P2.txt");
-	Result.ler("poly_result.txt");
+	//P1.ler("poly_P1.txt");
+	//P2.ler("poly_P2.txt");
+	//Result.ler("poly_result.txt");
 
 	cout << "P1:     " << P1 << printGrau(P1) << endl;
 	cout << "P2:     " << P2 << printGrau(P2) << endl;
 	cout << "Result: " << Result << printGrau(Result) << endl;
 
-	Result = P1*P2;
+	Result = P1 - P2;
 	cout << endl;
 	cout << "Result: " << Result << printGrau(Result) << endl;
 
+	std::cout << P1.ler("teste.txt") << '\n';
+	cout << "P1:     " << P1 << printGrau(P1) << endl;
 
 	return 0;
 }
