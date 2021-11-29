@@ -1,4 +1,5 @@
-#include "Poly.hpp"
+#include "Poly.h"
+
 
 /**
  * @brief Construtor Padrão
@@ -16,6 +17,21 @@ Poly::Poly(uint grau)
 {
 	D = grau + 1;
 	a = new double[D];
+
+	for (int i = 0; i < getGrau(); ++i)
+	{
+		a[i] = 0.;
+	}
+	a[getGrau()] = 1.;
+}
+
+Poly::Poly(const Poly &poly)
+{
+	D = poly.D;
+	a = new double[D];
+
+	for (uint i = 0; i < D; ++i)
+		a[i] = poly.a[i];
 }
 
 /**
@@ -35,6 +51,7 @@ void Poly::recriar(uint grau)
 	if (grau == 0)
 	{
 		delete[] a;
+		a = nullptr;
 
 		D = grau + 1;
 		a = new double[grau + 1];
@@ -43,24 +60,17 @@ void Poly::recriar(uint grau)
 	}
 	else
 	{
-		D = grau + 1;
-		double *prov = new double[grau + 1];
-
-		for (int i = 0; i < getGrau()+1; ++i)
-		{
-			prov[i] = a[i];
-		}
-
 		delete[] a;
+		a = nullptr;
 
+		D = grau + 1;
 		a = new double[grau + 1];
 
-		for (int i = 0; i < getGrau()+1; ++i)
+		for (int i = 0; i < getGrau(); ++i)
 		{
-			a[i] = prov[i];
+			a[i] = 0.;
 		}
-
-		delete[] prov;
+		a[getGrau()] = 1;
 	}
 }
 
@@ -93,6 +103,25 @@ bool Poly::isZero() const
 }
 
 /**
+ * @brief 
+ * 
+ */
+void Poly::setCoef(uint index, float num)
+{
+	if (index < 0 || index > getGrau())
+		std::cerr << "Indice Invalido\n";
+
+	else if (index == getGrau() && num == 0.)
+		std::cerr << "Coeficiente Invalido\n";
+
+	else if (getGrau() == 0)
+		a[0] = num;
+
+	else
+		a[index] = num;
+}
+
+/**
  * @brief Adquire o grau dopolinômio
  *
  * @return grau do polinômio
@@ -122,10 +151,17 @@ double Poly::getCoef(uint index) const
 double Poly::getValor(double valor) const
 {
 	double total = 0;
-	for (int i = getGrau(); i >= 0; --i)
+	if (empty())
+		total = 0;
+
+	else
 	{
-		total += a[i] * pow(valor, i);
+		for (int i = getGrau(); i >= 0; --i)
+		{
+			total += a[i] * pow(valor, i);
+		}
 	}
+
 	return total;
 }
 
@@ -139,7 +175,7 @@ bool Poly::salvar(string nome_arq)
 {
 	std::ofstream save(nome_arq, std::ios::out);
 
-	save << "POLY" << ' ' << D << ' ';
+	save << "POLY" << ' ' << D << '\n';
 
 	for (uint i = 0; i < D; ++i)
 	{
@@ -180,14 +216,16 @@ bool Poly::ler(string nome_arq)
 	arq_ler >> poly;
 	arq_ler >> D;
 
+	double *aux = new double[D];
+
 	if (poly == "POLY")
 	{
 
-		a = new double[D];
+		//a = new double[D];
 
 		for (uint i = 0; i < D; ++i)
 		{
-			if (arq_ler.eof())
+			if (arq_ler.eof() && i <= D - 1)
 			{
 				arq_ler.close();
 
@@ -195,10 +233,22 @@ bool Poly::ler(string nome_arq)
 
 				break;
 			}
-			arq_ler >> a[i];
+			//arq_ler >> a[i];
+			arq_ler >> aux[i];
 		}
 
-		teste = true;
+		if (aux[getGrau()] == 0.)
+		{
+			teste = false;
+		}
+
+		else
+		{
+			a = new double[D];
+			for (uint i = 0; i < D; ++i)
+				a[i] = aux[i];
+			teste = true;
+		}
 	}
 	else if (poly != "POLY" || D < 0)
 	{
@@ -206,6 +256,9 @@ bool Poly::ler(string nome_arq)
 
 		teste = false;
 	}
+
+	//arq_ler.close();
+	delete[] aux;
 
 	return teste;
 }
@@ -243,14 +296,192 @@ double Poly::operator()(double valor)
 	return total;
 }
 
+/**
+ * @brief Sobrecarrega o + para soma de polinômios
+ * 
+ * @param poly 
+ * @return Poly 
+ * 
+ */
 Poly Poly::operator+(const Poly &poly) const
 {
-	Poly prov;
 
 	if (poly.empty() || poly.isZero())
 		return *this;
+
 	else if (this->empty() || this->isZero())
 		return poly;
+
+	else
+	{
+		if (getGrau() == poly.getGrau())
+		{
+			Poly prov(getGrau());
+			for (uint i = 0; i < poly.D; ++i)
+				prov.a[i] = this->a[i] + poly.a[i];
+
+			return prov;
+		}
+
+		else if (getGrau() > poly.getGrau())
+		{
+			Poly prov;
+			prov = (*this);
+
+			for (uint i = 0; i < poly.D; ++i)
+				prov.a[i] = this->a[i] + poly.a[i];
+
+			return prov;
+		}
+
+		else
+		{
+			Poly prov;
+			prov = poly;
+
+			for (uint i = 0; i < this->D; ++i)
+				prov.a[i] = this->a[i] + poly.a[i];
+
+			return prov;
+		}
+	}
+}
+
+/**
+ * @brief Sobrecarrega o - para subtração de polinômios
+ * 
+ * @param poly 
+ * @return Poly 	
+*/
+Poly Poly::operator-(const Poly &poly) const
+{
+
+	Poly prov(poly.D);
+
+	if (poly.empty() || poly.isZero())
+		return *this;
+
+	else if (this->empty() || this->isZero())
+	{
+		for (uint i = 0; i < poly.D; ++i)
+		{
+			prov.a[i] = -poly.a[i];
+		}
+		return prov;
+	}
+
+	else
+	{
+		if (getGrau() == poly.getGrau())
+		{
+			Poly prov(getGrau());
+			for (uint i = 0; i < poly.D; ++i)
+				prov.a[i] = this->a[i] - poly.a[i];
+
+			return prov;
+		}
+
+		else if (getGrau() > poly.getGrau())
+		{
+			Poly prov;
+			prov = (*this);
+
+			for (uint i = 0; i < poly.D; ++i)
+				prov.a[i] = this->a[i] - poly.a[i];
+
+			return prov;
+		}
+
+		else
+		{
+			Poly prov;
+
+			prov = poly;
+			prov = -prov;
+
+			for (uint i = 0; i < this->D; ++i)
+				prov.a[i] = this->a[i] - poly.a[i];
+
+			return prov;
+		}
+	}
+}
+
+Poly Poly::operator-() const
+{
+
+	if (this->empty())
+		return Poly();
+
+	else if (this->isZero())
+		return Poly(0);
+
+	Poly prov(this->getGrau());
+	for (uint i = 0; i < prov.D; ++i)
+	{
+		prov.a[i] = -1 * (this->a[i]);
+	}
+	return prov;
+}
+
+void Poly::operator=(const Poly &poly)
+{
+	if (this != &poly)
+	{
+		if (this->D != poly.D)
+		{
+			delete[] a;
+
+			D = poly.D;
+
+			a = new double[D];
+
+			for (uint i = 0; i < D; ++i)
+				this->a[i] = poly.a[i];
+		}
+
+		else if (this->D == poly.D)
+		{
+			for (uint i = 0; i < D; ++i)
+				this->a[i] = poly.a[i];
+		}
+	}
+}
+
+/**
+ * @brief Multiplicação de Polinômios
+ * 
+ * @param poly 
+ * @return Poly 
+ */
+Poly Poly::operator*(const Poly &poly) const
+{
+	if ((this->empty() && poly.isZero()) || (this->isZero() && poly.empty()))
+		return Poly();
+
+	else if ((this->empty() && poly.getGrau() > 0) || (this->getGrau() > 0 && poly.empty()))
+		return Poly();
+
+	else if ((this->getGrau() > 0 && poly.isZero()) || (this->isZero() && poly.getGrau() > 0))
+		return Poly(0);
+
+	else
+	{
+		// x^2 * x^2 = x^4
+
+		uint grau = getGrau() + poly.getGrau();
+		Poly prov(grau);
+
+		for (uint i = 0; i < this->D; ++i)
+		{
+			for (uint j = 0; j < poly.D; ++j)
+			{
+				prov.a[i + j] += a[i] * poly.a[j];
+			}
+		}
+
+		return prov;
+	}
 }
 
 /**
@@ -305,11 +536,27 @@ std::ostream &operator<<(std::ostream &out, Poly &pl)
 
 std::istream &operator>>(std::istream &in, Poly &pl)
 {
-	std::cout << pl.getGrau() << '\n';
-	for (int i = pl.getGrau(); i >= 0; --i)
+
+	if (pl.empty())
 	{
-		std::cout << "x^" << i << ": ";
-		in >> pl.a[i];
+		std::cerr << "Polinomio VAZIO\n";
+	}
+
+	else
+	{
+		std::cout << pl.getGrau() << '\n';
+		for (int i = pl.getGrau(); i >= 0; --i)
+		{
+			std::cout << "x^" << i << ": ";
+			in >> pl.a[i];
+			if (i == pl.getGrau() && pl.getGrau() !=0 && pl.a[i] == 0. && !(pl.empty()))
+			{
+				do
+				{
+					in >> pl.a[i];
+				} while (pl.a[i] == 0);
+			}
+		}
 	}
 
 	return in;

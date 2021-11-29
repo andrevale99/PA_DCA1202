@@ -23,7 +23,8 @@ class Poly
 
 public:
 	Poly();
-	Poly(uint grau);
+	explicit Poly(uint grau);
+	Poly(const Poly &poly);
 
 	~Poly();
 
@@ -31,6 +32,8 @@ public:
 
 	bool empty() const;
 	bool isZero() const;
+
+	void setCoef(uint index, float num);
 
 	int getGrau() const;
 	double getCoef(uint index) const;
@@ -40,6 +43,10 @@ public:
 	double operator[](uint index);
 	double operator()(double valor);
 	Poly operator+(const Poly &poly) const;
+	Poly operator-(const Poly &poly) const;
+	Poly operator-() const;
+	void operator=(const Poly &poly);
+	Poly operator*(const Poly &poly) const;
 
 	bool salvar(string nome_arq);
 	bool ler(string nome_arq);

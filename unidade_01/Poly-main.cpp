@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "Poly.hpp"
+#include "Poly.h"
 
 using namespace std;
 

@@ -3,3 +3,5 @@ poly.out
 git_token.txt
 Prova_Poly_2021-1.txt
 poly_P1.txt
+*.txt
+makefile
