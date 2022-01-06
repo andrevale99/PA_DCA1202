@@ -437,6 +437,8 @@ double Labirinto::calculaCaminho(int& prof, int& NAbert, int& NFech)
   //////// FALTA FAZER ///////
   ////////////////////////////
 
+
+
   // Erro no calculo do caminho
   compr = -1.0;
   prof = -1;
