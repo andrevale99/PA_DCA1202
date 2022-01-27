@@ -109,28 +109,32 @@ void Circuit::resize(unsigned NI, unsigned NO, unsigned NP)
 		out_circ.resize(NO);
 		ports.resize(NP);
 
-		for (auto &id : id_out)
+        for (int i=0; i < getNumOutputs(); ++i)
 		{
-			id = 0;
+            id_out[i] = 0;
 		}
 
-		for (auto &out : out_circ)
+        for (int i=0; i < getNumOutputs(); ++i)
 		{
-			out = bool3S::UNDEF;
+            out_circ[i] = bool3S::UNDEF;
 		}
 
-		for (auto &p : ports)
+        for (int i=0; i < getNumPorts(); ++i)
 		{
-            p = nullptr;
-		}
+            ports[i] = nullptr;
+        }
 	}
 }
 
 void Circuit::operator=(const Circuit &C)
 {
-	Nin = C.Nin;
-	id_out = C.id_out;
-	out_circ = C.out_circ;
+    if (this != &C)
+    {
+        Nin = C.Nin;
+        id_out = C.id_out;
+        out_circ = C.out_circ;
+    }
+
 }
 
 /// ***********************
@@ -297,14 +301,9 @@ void Circuit::setPort(int IdPort, std::string Tipo, unsigned NIn)
         if (validType(Tipo))
         {
             ports[IdPort-1] = allocPort(Tipo);
+            ports[IdPort-1]->setNumInputs(NIn);
         }
-
-		else
-			return;
 	}
-
-	else
-		return;
 }
 
 void Circuit::setId_inPort(int IdPort, unsigned I, int IdOrig) const
@@ -592,6 +591,12 @@ bool Circuit::salvar(const std::string &arq) const
 
 bool Circuit::simular(const std::vector<bool3S> &in_circ)
 {
+    if(!valid())
+    {
+        std::cerr << "\n****Circuito INVALIDO para simular****\n";
+        return false;
+    }
+
 	vector<int> id_in;
 
 	bool tudo_def;
