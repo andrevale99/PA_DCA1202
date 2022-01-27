@@ -104,16 +104,26 @@ void MainCircuito::slotModificarPorta(int IdPort, QString TipoPort, int NumInput
   // ### falta_fazer(); ### ?
   C.setPort(IdPort, TipoPort.toStdString(), NumInputsPort);
 
+  if(TipoPort.toStdString() == "NT")
+  {
+    C.setId_inPort(IdPort, 0, IdInput0);
+  }
+
   // Aqui devem ser chamados metodos da classe Circuito que altere a porta cuja
   // id eh IdPort para que as origens de suas entradas sejam dadas pelas ids em IdInput#
   // ### falta_fazer(); ### ?
   // ### falta_fazer(); ### ?
   // ### falta_fazer(); ### ?
   // ### falta_fazer(); ### ?
-  C.setId_inPort(IdPort, 0, IdInput0);
-  C.setId_inPort(IdPort, 1, IdInput1);
-  C.setId_inPort(IdPort, 2, IdInput2);
-  C.setId_inPort(IdPort, 3, IdInput3);
+  else
+  {
+      C.setId_inPort(IdPort, 0, IdInput0);
+      C.setId_inPort(IdPort, 1, IdInput1);
+      C.setId_inPort(IdPort, 2, IdInput2);
+      C.setId_inPort(IdPort, 3, IdInput3);
+  }
+
+  C.imprimir(std::cout);
 
   // Depois de alterada, deve ser reexibida a porta correspondente e limpa a tabela verdade
   showPort(IdPort-1);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.1, 2022-01-26T15:11:11. -->
+<!-- Written by QtCreator 6.0.1, 2022-01-26T16:48:01. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -238,8 +238,9 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/andre/Desktop/circuito-interface/Circuito.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/andre/Desktop/circuito-interface/Circuito.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Circuito2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/andre/Desktop/Git/Projetos_PA_DCA1202/unidade_03/Circuito/circuito-interface/Circuito.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/andre/Desktop/Git/Projetos_PA_DCA1202/unidade_03/Circuito/circuito-interface/Circuito.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
