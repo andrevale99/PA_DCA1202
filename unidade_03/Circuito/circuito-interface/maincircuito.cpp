@@ -123,13 +123,35 @@ void MainCircuito::slotModificarPorta(int IdPort, QString TipoPort, int NumInput
   // ### falta_fazer(); ### ?
   else
   {
-      C.setId_inPort(IdPort, 0, IdInput0);
-      C.setId_inPort(IdPort, 1, IdInput1);
-      C.setId_inPort(IdPort, 2, IdInput2);
-      C.setId_inPort(IdPort, 3, IdInput3);
+      switch (NumInputsPort) {
+        case 1:
+          C.setId_inPort(IdPort, 0, IdInput0);
+          break;
+
+        case 2:
+          C.setId_inPort(IdPort, 0, IdInput0);
+          C.setId_inPort(IdPort, 1, IdInput1);
+          break;
+
+        case 3:
+          C.setId_inPort(IdPort, 0, IdInput0);
+          C.setId_inPort(IdPort, 1, IdInput1);
+          C.setId_inPort(IdPort, 2, IdInput2);
+          break;
+
+        case 4:
+          C.setId_inPort(IdPort, 0, IdInput0);
+          C.setId_inPort(IdPort, 1, IdInput1);
+          C.setId_inPort(IdPort, 2, IdInput2);
+          C.setId_inPort(IdPort, 3, IdInput3);
+          break;
+
+      default:
+        break;
+      }
   }
 
-  C.imprimir(std::cout);
+  //C.imprimir(std::cout);
 
   // Depois de alterada, deve ser reexibida a porta correspondente e limpa a tabela verdade
   showPort(IdPort-1);
@@ -141,7 +163,7 @@ void MainCircuito::slotModificarSaida(int IdSaida, int IdOrigemSaida)
   // Aqui deve ser chamado um metodo da classe Circuito que altere a saida cuja
   // id eh IdSaida para que ela assuma a origem especificada por
   // IdOrigemSaida
-  // ### falta_fazer(); ### ?
+  // ### falta_fazer(); ### V
     C.setIdOutput(IdSaida, IdOrigemSaida);
 
   // Depois de alterada, deve ser reexibida a saida correspondente e limpa a tabela verdade
@@ -184,6 +206,7 @@ void MainCircuito::redimensionaTabelas()
   ui->tablePortas->setRowCount(numPorts);
   for (i=0; i<numPorts; i++)
   {
+      qDebug() << "indice_valido: " << QString::fromStdString(C.getNamePort(i+1)) << '\n';
     showPort(i);
   }
 
@@ -255,7 +278,7 @@ void MainCircuito::showPort(unsigned i)
   // Testa se indice i eh valido, comparando com num portas consultado da classe Circuito
   // ### falta_fazer(); ### V
   // Provisoriamente,
-  bool indice_valido = C.validPort(i+1);
+  bool indice_valido = C.validIdPort(i+1);
   if (!indice_valido) return;  // Encerra a funcao sem fazer nada
 
   // Esses valores (nomePorta, numInputsPorta, idInputPorta[])
@@ -265,7 +288,7 @@ void MainCircuito::showPort(unsigned i)
   // Provisoriamente,
   QString namePort = QString::fromStdString(C.getNamePort(i+1));
   int numInputsPort = C.getNumInputsPort(i+1);
-  int idInputPort[4];
+  int idInputPort[numInputsPort];
 
   QLabel *prov;
   int j;
@@ -310,7 +333,7 @@ void MainCircuito::showOutput(unsigned i)
   // Testa se indice i eh valido, comparando com num saidas consultado da classe Circuito
   // ### falta_fazer(); ### V
   // Provisoriamente,
-  bool indice_valido = C.getIdOutput(i+1);
+  bool indice_valido = C.validIdOutput(i+1);
   if (!indice_valido) return;  // Encerra a funcao sem fazer nada
 
   // Esse valor (idOutput) deve ser lido a partir de metodos de consulta da classe Circuito
