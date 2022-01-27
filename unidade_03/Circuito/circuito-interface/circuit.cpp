@@ -292,54 +292,6 @@ void Circuit::setPort(int IdPort, std::string Tipo, unsigned NIn)
         {
             ports[IdPort-1] = allocPort(Tipo);
         }
-        /*if (Tipo == "NT")
-		{
-			delete ports[IdPort - 1];
-			ports[IdPort - 1] = new Port_NOT();
-			ports[IdPort - 1]->setNumInputs(NIn);
-		}
-
-		else if (Tipo == "AN")
-		{
-			delete ports[IdPort - 1];
-			ports[IdPort - 1] = new Port_AND();
-			ports[IdPort - 1]->setNumInputs(NIn);
-		}
-
-		else if (Tipo == "NA")
-		{
-			delete ports[IdPort - 1];
-			ports[IdPort - 1] = new Port_NAND();
-			ports[IdPort - 1]->setNumInputs(NIn);
-		}
-
-		else if (Tipo == "OR")
-		{
-			delete ports[IdPort - 1];
-			ports[IdPort - 1] = new Port_OR();
-			ports[IdPort - 1]->setNumInputs(NIn);
-		}
-
-		else if (Tipo == "NO")
-		{
-			delete ports[IdPort - 1];
-			ports[IdPort - 1] = new Port_NOR();
-			ports[IdPort - 1]->setNumInputs(NIn);
-		}
-
-		else if (Tipo == "XO")
-		{
-			delete ports[IdPort - 1];
-			ports[IdPort - 1] = new Port_XOR();
-			ports[IdPort - 1]->setNumInputs(NIn);
-		}
-
-		else if (Tipo == "NX")
-		{
-			delete ports[IdPort - 1];
-			ports[IdPort - 1] = new Port_NXOR();
-			ports[IdPort - 1]->setNumInputs(NIn);
-        }*/
 
 		else
 			return;
@@ -398,7 +350,7 @@ void Circuit::digitar()
 		{
 			std::cout << "Digite o tipo (NT,AN,NA,OR,NO,XO,NX): ";
 			std::cin >> tipo;
-        } while (validType(tipo));
+        } while (!validType(tipo));
 
 		std::cin.ignore();
 
