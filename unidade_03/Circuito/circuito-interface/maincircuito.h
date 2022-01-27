@@ -1,6 +1,12 @@
 #ifndef MAINCIRCUITO_H
 #define MAINCIRCUITO_H
 
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include <QMainWindow>
 #include <QLabel>
 

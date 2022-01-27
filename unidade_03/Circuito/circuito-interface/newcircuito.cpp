@@ -1,3 +1,9 @@
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include "newcircuito.h"
 #include "ui_newcircuito.h"
 #include "maincircuito.h"

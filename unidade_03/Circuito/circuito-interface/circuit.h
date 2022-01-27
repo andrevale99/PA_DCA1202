@@ -1,6 +1,12 @@
 #ifndef _CIRCUIT_H_
 #define _CIRCUIT_H_
 
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include <iostream>
 #include <string>
 #include <vector>

@@ -1,6 +1,12 @@
 #ifndef MODIFICARSAIDA_H
 #define MODIFICARSAIDA_H
 
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include <QDialog>
 
 /* ======================================================================== *

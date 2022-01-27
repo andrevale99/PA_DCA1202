@@ -1,6 +1,12 @@
 #ifndef MODIFICARPORTA_H
 #define MODIFICARPORTA_H
 
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include <QDialog>
 
 /* ======================================================================== *

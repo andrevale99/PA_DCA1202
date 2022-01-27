@@ -1,6 +1,12 @@
 #ifndef _BOOL3S_H_
 #define _BOOL3S_H_
 
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include <iostream>
 
 // Criando um tipo de dados enumerado (bool3S) para representar um booleano com 3 estados:

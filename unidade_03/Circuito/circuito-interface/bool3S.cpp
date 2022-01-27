@@ -1,3 +1,9 @@
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include <iostream>
 #include "bool3S.h"
 

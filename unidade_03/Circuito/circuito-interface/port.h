@@ -1,6 +1,12 @@
 #ifndef _PORT_H_
 #define _PORT_H_
 
+/**
+ * @Dupla
+ * 		AndrÃ© Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa MoisÃ©s
+*/
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -96,7 +102,7 @@ public:
 
   // Fixa o numero de entradas da porta
   // Depois de testar o parametro (validNumInputs), se o novo numero de entradas for igual ao
-  // anterior não faz nada; caso seja diferente, redimensiona e inicializa os elementos do
+  // anterior nï¿½o faz nada; caso seja diferente, redimensiona e inicializa os elementos do
   // array id_in com valor invalido (0)
   void setNumInputs(unsigned NI);
 
@@ -158,7 +164,7 @@ public:
 
   // Simula uma porta logica
   // Recebe um vector de bool3S com os valores logicos atuais das entradas da porta
-  // Testa se a dimensao do vetor eh igual ao numero de entradas da porta; se não for,
+  // Testa se a dimensao do vetor eh igual ao numero de entradas da porta; se nï¿½o for,
   // faz out_port <- UNDEF e retorna.
   // Armazena o valor bool3S com o resultado da simulacao (saida da porta)
   // no dado "out_port" da porta

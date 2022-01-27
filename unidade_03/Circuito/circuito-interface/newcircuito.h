@@ -1,6 +1,12 @@
 #ifndef NEWCIRCUITO_H
 #define NEWCIRCUITO_H
 
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include <QDialog>
 
 /* =============================================================================== *

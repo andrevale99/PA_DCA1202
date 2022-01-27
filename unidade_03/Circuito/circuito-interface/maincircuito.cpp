@@ -1,3 +1,9 @@
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include "bool3S.h"
 #include "maincircuito.h"
 #include "ui_maincircuito.h"

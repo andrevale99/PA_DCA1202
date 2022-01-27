@@ -1,3 +1,9 @@
+/**
+ * @Dupla
+ * 		André Menezes de Freitas Vale
+ * 		Lucas Emanuel Costa Moisés
+*/
+
 #include "maincircuito.h"
 #include "modificarporta.h"
 #include "ui_modificarporta.h"
