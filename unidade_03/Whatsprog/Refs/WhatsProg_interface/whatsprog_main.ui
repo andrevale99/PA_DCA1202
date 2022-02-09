@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WhatsProgMain</class>
+ <widget class="QMainWindow" name="WhatsProgMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WhatsProg</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="2">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="labelConversas">
+        <property name="text">
+         <string>CONVERSAS</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="tableConversas">
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOn</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="tabKeyNavigation">
+         <bool>false</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="showGrid">
+         <bool>false</bool>
+        </property>
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <column/>
+        <column/>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="2">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QLabel" name="labelMensagens">
+        <property name="text">
+         <string>NENHUMA CONVERSA SELECIONADA</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="tableMensagens">
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOn</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="tabKeyNavigation">
+         <bool>false</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::NoSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="columnCount">
+         <number>3</number>
+        </property>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <column/>
+        <column/>
+        <column/>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="labelMensagem">
+      <property name="text">
+       <string>Mensagem:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEditMensagem"/>
+    </item>
+   </layout>
+   <zorder>labelMensagem</zorder>
+   <zorder>lineEditMensagem</zorder>
+   <zorder></zorder>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>900</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuConversa">
+    <property name="title">
+     <string>Conversas</string>
+    </property>
+    <addaction name="actionNova_conversa"/>
+    <addaction name="actionRemover_conversa"/>
+   </widget>
+   <widget class="QMenu" name="menuMensagens">
+    <property name="title">
+     <string>Mensagens</string>
+    </property>
+    <addaction name="actionApagar_mensagens"/>
+   </widget>
+   <widget class="QMenu" name="menuConexao">
+    <property name="title">
+     <string>Conexão</string>
+    </property>
+    <addaction name="actionNovo_usuario"/>
+    <addaction name="actionUsuario_existente"/>
+    <addaction name="actionDesconectar"/>
+    <addaction name="separator"/>
+    <addaction name="actionSair"/>
+   </widget>
+   <addaction name="menuConexao"/>
+   <addaction name="menuConversa"/>
+   <addaction name="menuMensagens"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionNova_conversa">
+   <property name="text">
+    <string>Nova conversa ...</string>
+   </property>
+  </action>
+  <action name="actionRemover_conversa">
+   <property name="text">
+    <string>Remover conversa</string>
+   </property>
+  </action>
+  <action name="actionApagar_mensagens">
+   <property name="text">
+    <string>Apagar mensagens</string>
+   </property>
+  </action>
+  <action name="actionNovo_usuario">
+   <property name="text">
+    <string>Novo usuário...</string>
+   </property>
+  </action>
+  <action name="actionUsuario_existente">
+   <property name="text">
+    <string>Usuário existente...</string>
+   </property>
+  </action>
+  <action name="actionDesconectar">
+   <property name="text">
+    <string>Desconectar</string>
+   </property>
+  </action>
+  <action name="actionSair">
+   <property name="text">
+    <string>Sair</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
