@@ -79,8 +79,7 @@ private:
 	list<Usuario> user;
 	list<Usuario>::iterator it_user;
 
-	vector<Mensagem> doUsuario;
-	vector<Mensagem> paraUsuario;
+	list<Mensagem> buffer;
 
 	/// Envia para o usuario as mensagens que estejam arquivadas em vector<Mensagem> paraUsuario;
 	/// com status MSG_RECEBIDA e que seja destinada ao usuario.

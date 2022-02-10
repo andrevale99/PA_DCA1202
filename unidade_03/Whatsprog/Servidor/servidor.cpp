@@ -210,7 +210,7 @@ int WhatsProgDadosServidor::main_thread()
 	/// As ultimas ids dos usuarios fake (soh faz sentido no servidor fake)
 	/// No servidor real, as last_id estao armazenados em cada usuario na
 	/// lista de usuarios
-	int32_t last_id[2] = {0, 0};
+	//int32_t last_id[2] = {0, 0};
 
 	while (!fim)
 	{
@@ -266,12 +266,22 @@ int WhatsProgDadosServidor::main_thread()
 					{
 						// Pode ser mysocket_status::SOCK_TIMEOUT, mysocket_status::SOCK_DISCONNECTED ou mysocket_status::SOCK_ERRO
 						// Nao deve ser mysocket_status::SOCK_TIMEOUT porque a funcao read_int nao foi chamada com tempo maximo
-						if (iResult == mysocket_status::SOCK_ERROR || iResult == mysocket_status::SOCK_DISCONNECTED )
+						if (iResult == mysocket_status::SOCK_ERROR)
 						{
 							cerr << "Erro na leitura de comando do cliente " << it_user.getLogin() << ". Desconectando\n";
 						}
+						else if (iResult==mysocket_status::SOCK_DISCONNECTED)
+						{
+							cerr << "Cliente " << it_user.getLogin() << " desconectador\n";
+						}
+						else if (iResult==mysocket_status::SOCK_TIMEOUT)
+						{
+							cerr << "Leitura do destinatario " << it_user.getLogin() << "deu algum erro desconhecido\n";
+						}
+
 						it_user.close();
 					}
+					
 					// Se a leitura foi correta, executa o comando lido
 					if (it_user.connected())
 						switch (cmd)
