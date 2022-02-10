@@ -80,17 +80,17 @@ private:
 	list<Usuario>::iterator it_user;
 
 	list<Mensagem> buffer;
-
+	
 	/// Envia para o usuario as mensagens que estejam arquivadas em vector<Mensagem> paraUsuario;
 	/// com status MSG_RECEBIDA e que seja destinada ao usuario.
 	/// Apos o envio, altera o status da msg enviada para MSG_ENTREGUE
-	void send_buffer_msgs();
+	void enviarMsgsParaUsuario();
 
 	/// Envia para o usuario as confirmacoes de visualizacao das mensagens
 	/// que estejam arquivadas (vector<Mensagem> doUsuario;) com status MSG_LIDA
 	/// e que tenha sido enviada pelo usuario.
 	/// Apos o envio da confirmacao, apaga a msg
-	void send_confirmacoes();
+	void enviarConfirmacoesParaUsuario();
 
 public:
 	/// Funcoes de acesso aas funcionalidades basicas dos sockets
