@@ -202,7 +202,7 @@ int WhatsProgDadosServidor::main_thread()
 {
 	/// A fila para select (esperar dados em varios sockets)
 	mysocket_queue f;
-	//teste
+
 	mysocket_status iResult;
 	int32_t cmd;
 	int32_t id;
@@ -244,13 +244,130 @@ int WhatsProgDadosServidor::main_thread()
 				{
 					iResult = it_user->read_int(cmd, TIMEOUT_WHATSPROG * 1000);
 
-					if (iResult == mysocket_status::SOCK_OK)
+					switch (cmd)
 					{
+					case CMD_NEW_USER:
+					case CMD_LOGIN_USER:
+					{
+						// Soh pode chegar comando de definicao de usuario em socket recem-criado
+						cerr << "Tentativa de redefinicao de usuario no socket do cliente " << it_user->getLogin() << ". Desconectando\n";
+						it_user->close();
+						break;
+					}
+					case CMD_LOGIN_OK:
+					case CMD_LOGIN_INVALIDO:
+					case CMD_MSG_RECEBIDA:
+					case CMD_MSG_ENTREGUE:
+					case CMD_MSG_LIDA2:
+					case CMD_ID_INVALIDA:
+					case CMD_USER_INVALIDO:
+					case CMD_MSG_INVALIDA:
+					case CMD_NOVA_MSG:
+					{
+						Mensagem msg;
+						string dest; // Destinatario
+						string texto;
+
+						iResult = it_user->read_int(id, TIMEOUT_WHATSPROG * 1000);
+
+						if (iResult == mysocket_status::SOCK_OK)
+						{
+							iResult = it_user->read_string(dest, TIMEOUT_WHATSPROG * 1000);
+						}
+
+						if (iResult == mysocket_status::SOCK_OK)
+						{
+							iResult = it_user->read_string(texto, TIMEOUT_WHATSPROG * 1000);
+						}
+
+						if (iResult != mysocket_status::SOCK_OK)
+						{
+							cerr << "Erro na recepcao de parametros de CMD_NOVA_MSG do cliente "
+								 << it_user->getLogin() << ". Desconectando\n";
+
+							it_user->close();
+						}
+
+						bool msg_valida = (msg.setStatus(MsgStatus::MSG_RECEBIDA) && msg.setRemetente(it_user->getLogin()));
+
+						// Testa se a id da msg estah correta
+						if (msg_valida && it_user->connected() && (!msg.setId(id) || (id <= it_user->getLastId())))
+						{
+							cerr << "Mensagem com ID invalida " << id << " recebida do cliente "
+								 << it_user->getLogin() << ". Enviando cmd de erro\n";
+							it_user->write_int(CMD_ID_INVALIDA);
+							it_user->write_int(id);
+							msg_valida = false;
+						}
+
+						// Procura se o destinatario eh um usuario cadastrado
+						if (msg_valida && it_user->connected())
+						{
+							// Neste servidor fake, nao hah lista de usuarios cadastrados
+							// Os unicos outros usuarios cadastrados sao "userfake1" e "userfake2"
+
+							// Testa se o destinatario da msg estah correto
+							for (achar_dest = user.begin(); achar_dest != user.end(); ++achar_dest)
+							{
+
+								if (dest != achar_dest->getLogin() && achar_dest == user.end())
+								{
+									cerr << "Mensagem com destinatario invalido " << dest << " recebida do cliente "
+										 << it_user->getLogin() << ". Enviando cmd de erro\n";
+									it_user->write_int(CMD_USER_INVALIDO);
+									it_user->write_int(id);
+									msg_valida = false;
+								}
+							}
+						}
+
+						// Testa se o texto da msg estah correto
+						if (msg_valida && it_user->connected() &&
+							!msg.setTexto(texto))
+						{
+							cerr << "Mensagem com texto invalido recebida do cliente "
+								 << it_user->getLogin() << ". Enviando cmd de erro\n";
+							it_user->write_int(CMD_MSG_INVALIDA);
+							it_user->write_int(id);
+							msg_valida = false;
+						}
+
+						if(msg_valida && it_user->connected())
+						{
+							imprimeComandoRecebido(it_user->getLogin(), CMD_NOVA_MSG, id, dest);
+
+							buffer.push_back(msg);
+
+							it_user->setLastId(id);
+
+							// Envia a confirmacao de recebimento
+							bool envioOK = (it_user->write_int(CMD_MSG_RECEBIDA) == mysocket_status::SOCK_OK);
+							if (envioOK)
+								envioOK = (it_user->write_int(id) == mysocket_status::SOCK_OK);
+							if (!envioOK)
+							{
+								cerr << "Erro no envio de confirmacao de recebimento para remetente " << it_user->getLogin() << ". Desconectando\n";
+								it_user->close();
+							}
+							else
+							{
+								imprimeComandoEnviado(it_user->getLogin(), CMD_MSG_RECEBIDA, id);
+							}
+						}
+					}
+					default:
+					{
+						// Comando invalido
+						cerr << "Comando invalido (" << nome_cmd((ComandoWhatsProg)cmd) << ") recebido do cliente "
+							 << it_user->getLogin() << ". Desconectando\n";
+						it_user->close();
+						break;
+					}
 					}
 				}
 			}
 		}
-	}//FIM DO WHILE
+	} // FIM DO WHILE
 
 	cout << "\nServidor encerrado.\n";
 

@@ -77,9 +77,11 @@ private:
 	tcp_mysocket_server c;
 
 	list<Usuario> user;
-	list<Usuario>::iterator it_user;
+	
+	list<Usuario>::iterator it_user, achar_dest;
 
 	list<Mensagem> buffer;
+
 	
 	/// Envia para o usuario as mensagens que estejam arquivadas em vector<Mensagem> paraUsuario;
 	/// com status MSG_RECEBIDA e que seja destinada ao usuario.
