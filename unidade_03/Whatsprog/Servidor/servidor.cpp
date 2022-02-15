@@ -202,7 +202,7 @@ int WhatsProgDadosServidor::main_thread()
 {
 	/// A fila para select (esperar dados em varios sockets)
 	mysocket_queue f;
-
+	//teste
 	mysocket_status iResult;
 	int32_t cmd;
 	int32_t id;
