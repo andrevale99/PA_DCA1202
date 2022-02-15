@@ -77,20 +77,18 @@ private:
 	tcp_mysocket_server c;
 
 	list<Usuario> user;
-	
-	list<Usuario>::iterator it_user, achar_dest;
+
+	list<Usuario>::iterator it_user, achar_dest, achar_remet, achar_login, achar_senha;
 
 	list<Mensagem> buffer;
 	list<Mensagem>::iterator it_buffer;
 
-	
-	/// Envia para o usuario as mensagens que estejam arquivadas em vector<Mensagem> paraUsuario;
+	/// Envia para o usuario as mensagens que estejam arquivadas (paraUsuario[])
 	/// com status MSG_RECEBIDA e que seja destinada ao usuario.
 	/// Apos o envio, altera o status da msg enviada para MSG_ENTREGUE
-	void enviarMsgsParaUsuario(const string& remet, const string& dest, const string& msg);
-
+	void enviarMsgsParaUsuario();
 	/// Envia para o usuario as confirmacoes de visualizacao das mensagens
-	/// que estejam arquivadas (vector<Mensagem> doUsuario;) com status MSG_LIDA
+	/// que estejam arquivadas (doUsuario[]) com status MSG_LIDA
 	/// e que tenha sido enviada pelo usuario.
 	/// Apos o envio da confirmacao, apaga a msg
 	void enviarConfirmacoesParaUsuario();

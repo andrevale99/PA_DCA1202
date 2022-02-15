@@ -164,32 +164,6 @@ void WhatsProgDadosServidor::closeSockets()
 		it.close();
 }
 
-/// Envia para o usuario as mensagens que estejam arquivadas (paraUsuario[])
-/// com status MSG_RECEBIDA e que sejam destinadas ao usuario.
-/// Apos o envio, altera o status da msg enviada para MSG_ENTREGUE
-/// No servidor real deveria ser:
-/// Envia todas as mensagens que estejam no buffer com status MSG_RECEBIDA
-/// e que sejam destinadas ao destinatario para o qual o parametro iDest aponta.
-/// Apos o envio, altera o status das msgs enviadas para MSG_ENTREGUE
-/// void WhatsProgDadosServidor::enviarRecebidas(IterUsuario iDest)
-void WhatsProgDadosServidor::enviarMsgsParaUsuario(const string &remet, const string &dest, const string &msg)
-{
-}
-
-/// Envia para o usuario as confirmacoes de visualizacao das mensagens
-/// que estejam arquivadas (doUsuario[]) com status MSG_LIDA
-/// e que tenham sido enviadas pelo usuario.
-/// Apos o envio da confirmacao, apaga a msg
-/// No servidor real deveria ser:
-/// Envia todas as confirmacoes de visualizacao das mensagens
-/// que estejam no buffer com status MSG_LIDA e que tenham sido enviadas
-/// pelo remetente para o qual o parametro iRemet aponta.
-/// Apos o envio das confirmacoes, remove as msgs do buffer
-/// void WhatsProgDadosServidor::enviarConfirmacoes(IterUsuario iRemet)
-void WhatsProgDadosServidor::enviarConfirmacoesParaUsuario()
-{
-}
-
 /* **************************************************************************************
 ATENCAO: a parte a seguir da implementacao do servidor FAKE pode ser parcialmente adaptada
 para o servidor real, mas requer uma analise muito cuidadosa.
@@ -244,6 +218,12 @@ int WhatsProgDadosServidor::main_thread()
 				{
 					iResult = it_user->read_int(cmd, TIMEOUT_WHATSPROG * 1000);
 
+					if (iResult != mysocket_status::SOCK_OK)
+					{
+						cerr << "Erro na leitura de comando do cliente " << it_user->getLogin() << ". Desconectando\n";
+						it_user->close();
+					}
+
 					switch (cmd)
 					{
 					case CMD_NEW_USER:
@@ -269,13 +249,16 @@ int WhatsProgDadosServidor::main_thread()
 						string dest; // Destinatario
 						string texto;
 
+						// LER a ID do cliente
 						iResult = it_user->read_int(id, TIMEOUT_WHATSPROG * 1000);
 
+						// LER o DESTINATARIO do cliente
 						if (iResult == mysocket_status::SOCK_OK)
 						{
 							iResult = it_user->read_string(dest, TIMEOUT_WHATSPROG * 1000);
 						}
 
+						// LER o TEXTO do cliente
 						if (iResult == mysocket_status::SOCK_OK)
 						{
 							iResult = it_user->read_string(texto, TIMEOUT_WHATSPROG * 1000);
@@ -299,26 +282,27 @@ int WhatsProgDadosServidor::main_thread()
 							it_user->write_int(CMD_ID_INVALIDA);
 							it_user->write_int(id);
 							msg_valida = false;
+
+							it_user->close();
 						}
 
 						// Procura se o destinatario eh um usuario cadastrado
 						if (msg_valida && it_user->connected())
 						{
-							// Neste servidor fake, nao hah lista de usuarios cadastrados
-							// Os unicos outros usuarios cadastrados sao "userfake1" e "userfake2"
-
 							// Testa se o destinatario da msg estah correto
-							for (achar_dest = user.begin(); achar_dest != user.end(); ++achar_dest)
-							{
+							achar_dest = find(user.begin(), user.end(), dest);
 
-								if (dest != achar_dest->getLogin() && achar_dest == user.end())
-								{
-									cerr << "Mensagem com destinatario invalido " << dest << " recebida do cliente "
-										 << it_user->getLogin() << ". Enviando cmd de erro\n";
-									it_user->write_int(CMD_USER_INVALIDO);
-									it_user->write_int(id);
-									msg_valida = false;
-								}
+							bool tem_dest = msg.setDestinatario(dest);
+
+							if (achar_dest == user.end() || !tem_dest)
+							{
+								cerr << "Mensagem com destinatario invalido " << dest << " recebida do cliente "
+									 << it_user->getLogin() << ". Enviando cmd de erro\n";
+								it_user->write_int(CMD_USER_INVALIDO);
+								it_user->write_int(id);
+								msg_valida = false;
+
+								it_user->close();
 							}
 						}
 
@@ -331,15 +315,17 @@ int WhatsProgDadosServidor::main_thread()
 							it_user->write_int(CMD_MSG_INVALIDA);
 							it_user->write_int(id);
 							msg_valida = false;
+
+							it_user->close();
 						}
 
 						if (msg_valida && it_user->connected())
 						{
-							imprimeComandoRecebido(it_user->getLogin(), CMD_NOVA_MSG, id, dest);
-
 							buffer.push_back(msg);
 
 							it_user->setLastId(id);
+
+							imprimeComandoRecebido(it_user->getLogin(), CMD_NOVA_MSG, id, dest);
 
 							// Envia a confirmacao de recebimento
 							bool envioOK = (it_user->write_int(CMD_MSG_RECEBIDA) == mysocket_status::SOCK_OK);
@@ -357,26 +343,42 @@ int WhatsProgDadosServidor::main_thread()
 
 							// Testa se o destinatario estah conectado
 							// Se sim, envia a mensagem e muda status para MSG_ENTREGUE
-							for (achar_dest = user.begin(); achar_dest != user.end(); ++achar_dest)
+							achar_dest = find(user.begin(), user.end(), dest);
+							if (achar_dest != user.end())
 							{
 								if (achar_dest->connected())
 								{
-									it_buffer = find(buffer.begin(), buffer.end(), dest);
-									if (it_buffer != buffer.end())
-									{
-										enviarMsgsParaUsuario(it_buffer->getRemetente(), it_buffer->getDestinatario(), it_buffer->getTexto());
-										it_buffer->setStatus(MsgStatus::MSG_ENTREGUE);
-									}
+									achar_dest->write_int(msg.getId());
+									achar_dest->write_string(msg.getRemetente());
+									achar_dest->write_string(msg.getTexto());
+
+									msg.setStatus(MsgStatus::MSG_ENTREGUE);
+
+									// buffer.erase(it_buffer);
+									buffer.emplace(it_buffer, msg);
+								}
+							}
+
+							if (it_user->connected())
+							{
+								bool envio = (it_user->write_int(CMD_MSG_ENTREGUE) == mysocket_status::SOCK_OK);
+
+								if (envio)
+									envio = (it_user->write_int(msg.getId()) == mysocket_status::SOCK_OK);
+
+								if (!envio)
+								{
+									cerr << "Erro no envio de confirmacao de entrega para remetente "
+										 << it_user->getLogin() << ". Desconectando\n";
+									it_user->close();
+								}
+								else
+								{
+									imprimeComandoEnviado(it_user->getLogin(), CMD_MSG_ENTREGUE, msg.getId(), "");
 								}
 							}
 						}
 
-						// Caso a mesagem nao eh valida
-						else
-						{
-							cerr << "ERRO na criacao da mensagem do " << it_user->getLogin() << ". ENVIANDO comando\n";
-							it_user->write_int(CMD_MSG_INVALIDA);
-						}
 						break;
 					} // Fim do case CMD_NOVA_MSG
 
@@ -384,21 +386,59 @@ int WhatsProgDadosServidor::main_thread()
 					{
 						string remetente;
 
+						// LER a ID do cliente
 						iResult = it_user->read_int(id, TIMEOUT_WHATSPROG * 1000);
+
+						// LER o REMETENTE do cliente
 						if (iResult == mysocket_status::SOCK_OK)
 							iResult = it_user->read_string(remetente, TIMEOUT_WHATSPROG * 1000);
 
+						if (iResult != mysocket_status::SOCK_OK)
+						{
+							cerr << "Erro na recepcao de parametros de CMD_MSG_LIDA1 do cliente "
+								 << it_user->getLogin() << ". Desconectando\n";
+
+							it_user->close();
+						}
+
+						// Procura no buffer se ha msg com a mesma ID no BUFFER
 						it_buffer = find(buffer.begin(), buffer.end(), id);
 						if (it_buffer != buffer.end())
 						{
+							// Procura no buffer se ha msg com o mesmo REMETENTE no BUFFER
 							it_buffer = find(buffer.begin(), buffer.end(), remetente);
-							if (it_buffer!= buffer.end())
+							if (it_buffer != buffer.end())
 							{
 								it_buffer->setStatus(MsgStatus::MSG_LIDA);
+
+								for (auto it : user)
+								{
+									if (it.connected() && it.getLogin() == remetente)
+									{
+										it.write_int(CMD_MSG_LIDA2);
+										it.write_int(id);
+
+										buffer.erase(it_buffer);
+									}
+								}
 							}
 						}
+						if (it_buffer == buffer.end())
+						{
+							cerr << "NAO ha mensagem do buffer\n";
+							it_user->close();
+						}
 
+						break;
 					} // Fim do case CMD_MSG_LIDA1
+
+					case CMD_LOGOUT_USER:
+					{
+
+						imprimeComandoRecebido(it_user->getLogin(), CMD_LOGOUT_USER);
+						it_user->close();
+						break;
+					} // Fim do case CMD_LOGOUT_USER
 
 					default:
 					{
@@ -407,12 +447,169 @@ int WhatsProgDadosServidor::main_thread()
 							 << it_user->getLogin() << ". Desconectando\n";
 						it_user->close();
 						break;
+					} // Fim do case CMD_LOGOUT_USER
+					} // FIM DO SWITCH
+				}	  // Fim do if (had_activity) no socket do cliente
+
+				// Depois, testa se houve atividade no socket de conexao
+				if (!fim && c.accepting() && f.had_activity(c))
+				{
+					tcp_mysocket t;
+					string login, senha;
+
+					// Aceita provisoriamente a nova conexao
+					if (c.accept(t) != mysocket_status::SOCK_OK)
+					{
+						cerr << "Nao foi possivel estabelecer uma conexao\n";
+						t.close();
+						// Encerra a thread do servidor
+						fim = true;
 					}
+					// Leh o comando
+					if (t.connected())
+					{
+						iResult = t.read_int(cmd, TIMEOUT_LOGIN_WHATSPROG * 1000);
+						if (iResult != mysocket_status::SOCK_OK)
+						{
+							// Pode ser mysocket_status::SOCK_TIMEOUT, mysocket_status::SOCK_DISCONNECTED ou mysocket_status::SOCK_ERRO
+							cerr << "Erro na leitura do comando de conexao. Desconectando\n";
+							t.close();
+						}
 					}
+					// Testa o comando
+					if (t.connected() &&
+						(cmd != CMD_LOGIN_USER && cmd != CMD_NEW_USER))
+					{
+						cerr << "Comando (" << cmd << ") invalido. Desconectando\n";
+						t.close();
+					}
+					// Leh o parametro com o login do usuario que deseja se conectar
+					if (t.connected())
+					{
+						iResult = t.read_string(login, TIMEOUT_LOGIN_WHATSPROG * 1000);
+						if (iResult != mysocket_status::SOCK_OK)
+						{
+							cerr << "Erro na leitura de login. Desconectando\n";
+							t.close();
+						}
+					}
+					// Leh o parametro com a senha do usuario que deseja se conectar
+					if (t.connected())
+					{
+						iResult = t.read_string(senha, TIMEOUT_LOGIN_WHATSPROG * 1000);
+						if (iResult != mysocket_status::SOCK_OK)
+						{
+							cerr << "Erro na leitura de senha. Desconectando\n";
+							t.close();
+						}
+					}
+					// Testa o login e senha
+					if (t.connected() &&
+						(!testarNomeUsuario(login) || !testarSenha(senha)))
+					{
+						cerr << "Login/senha (" << login << "/" << senha << ") invalido. Desconectando\n";
+						t.write_int(CMD_LOGIN_INVALIDO);
+						t.close();
+					}
+					// Testa se o usuario eh adequado
+					if (t.connected())
+					{
+						if (cmd == CMD_NEW_USER)
+						{
+							achar_login = find(user.begin(), user.end(), login);
+
+							// Verifica se jah existe um usuario cadastrado com esse login
+							if (achar_login != user.end())
+							{
+								// Jah existe um usuario com esse login. Nao pode criar
+								cerr << "Login (" << login << ") jah utilizado. Desconectando\n";
+								t.write_int(CMD_LOGIN_INVALIDO);
+								t.close();
+							}
+							else if (achar_login == user.end())
+							{
+								Usuario novo;
+								novo.setUsuario(login, senha);
+
+								user.push_back(novo);
+
+								novo.write_int(CMD_LOGIN_OK);
+							}
+						}
+						else // else cmd == CMD_NEW_USER; implica cmd eh CMD_LOGIN_USER
+						{
+							achar_login = find(user.begin(), user.end(), login);
+
+							if (achar_login != user.end())
+							{
+								cerr << "Login (" << login << ") nao existe. Desconectando\n";
+								login = "invalido";
+								t.write_int(CMD_LOGIN_INVALIDO);
+								t.close();
+							}
+
+							// Testa se a senha confere
+							achar_senha = find(user.begin(), user.end(), login);
+							if (t.connected() && !(achar_senha->validarSenha(senha)))
+							{
+								// Senha invalida
+								cerr << "Senha para usuario (" << login << ") nao confere. Desconectando\n";
+								senha = "invalida";
+								t.write_int(CMD_LOGIN_INVALIDO);
+								t.close();
+							}
+
+							// Testa se o cliente jah estah conectado
+							if (t.connected() && it_user->connected())
+							{
+								// O usuario jah estah conectado
+								cerr << "Usuario (" << login << ") jah estah conectado. Desconectando\n";
+								login = "invalido";
+								t.write_int(CMD_LOGIN_INVALIDO);
+								t.close();
+							}
+
+							// Associa o socket que se conectou a um usuario cadastrado
+							if (t.connected())
+							{
+								it_user->swapSocket(t);
+							}
+						} // fim cmd eh CMD_LOGIN_USER
+
+						// Envia a confirmacao de conexao
+						if (login == it_user->getLogin() && it_user->connected())
+						{
+							imprimeComandoRecebido(login, (ComandoWhatsProg)cmd);
+							bool envioOK = (it_user->write_int(CMD_LOGIN_OK) == mysocket_status::SOCK_OK);
+							if (!envioOK)
+							{
+								cerr << "Erro no envio de confirmacao de login para cliente "
+									 << it_user->getLogin() << ". Desconectando\n";
+								it_user->close();
+							}
+							else
+							{
+								imprimeComandoEnviado(it_user->getLogin(), CMD_LOGIN_OK);
+							}
+						}
+						// Se for um cliente antigo, envia para o cliente que se reconectou:
+						// a) as mensagens enviadas para ele que estao no buffer
+						// b) as confirmacoes de visualizacao para ele que estao no buffer
+						if (login == it_user->getLogin() && it_user->connected() && cmd == CMD_LOGIN_USER)
+						{
+							// No servidor real, essas funcoes auxiliares teriam que receber como
+							// parametro um iterador para o usuario que se conectou.
+
+							// mensagens enviadas para ele que estao no buffer
+							enviarMsgsParaUsuario();
+							// as confirmacoes de visualizacao para ele que estao no buffer
+							enviarConfirmacoesParaUsuario();
+						}
+					} // fim do teste se usuario eh adequado
 				}
 			}
-		}
-	} // FIM DO WHILE
+		} // FIM DO FOR
+	}	  // FIM DO WHILE
 
 	cout << "\nServidor encerrado.\n";
 
