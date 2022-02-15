@@ -2,7 +2,8 @@
 #include <thread>
 
 #include "whatsprog_dados.h"
-#include "whatsprog_dados_servidorFAKE.h"
+#include "servidor.h"
+//#include "whatsprog_dados_servidorFAKE.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ int main(void)
 
   if (DS.listen(PORTA_WHATSPROG) != mysocket_status::SOCK_OK)
   {
-    cerr << "Não foi possível abrir o socket de controle\n";
+    cerr << "Nï¿½o foi possï¿½vel abrir o socket de controle\n";
     exit(1);
   }
 
