@@ -164,6 +164,120 @@ void WhatsProgDadosServidor::closeSockets()
 		it.close();
 }
 
+
+/// Envia para o usuario as mensagens que estejam arquivadas (list<Mensagem>buffer)
+/// com status MSG_RECEBIDA e que sejam destinadas ao usuario.
+/// Apos o envio, altera o status da msg enviada para MSG_ENTREGUE
+/// No servidor real deveria ser:
+/// Envia todas as mensagens que estejam no buffer com status MSG_RECEBIDA
+/// e que sejam destinadas ao destinatario para o qual o parametro iDest aponta.
+/// Apos o envio, altera o status das msgs enviadas para MSG_ENTREGUE
+/// void WhatsProgDadosServidor::enviarRecebidas(IterUsuario iDest)
+void WhatsProgDadosServidor::enviarMsgsParaUsuario(list<Usuario>::iterator it_dest)
+{
+	string remetente;
+
+	if (it_dest->connected())
+		for (it_buffer = buffer.begin(); it_buffer != buffer.end(); ++it_buffer)
+		{
+			if (it_buffer->getDestinatario() == it_dest->getLogin() &&
+				it_buffer->getStatus() == MsgStatus::MSG_RECEBIDA)
+			{
+				bool envioOK = (it_dest->write_int(CMD_NOVA_MSG) != mysocket_status::SOCK_ERROR);
+				if (envioOK)
+					envioOK = (it_dest->write_int(it_buffer->getId()) != mysocket_status::SOCK_ERROR);
+				if (envioOK)
+					envioOK = (it_dest->write_string(it_buffer->getRemetente()) != mysocket_status::SOCK_ERROR);
+				if (envioOK)
+					envioOK = (it_dest->write_string(it_buffer->getTexto()) != mysocket_status::SOCK_ERROR);
+				if (envioOK)
+				{
+					imprimeComandoEnviado(it_dest->getLogin(), CMD_NOVA_MSG, it_buffer->getId(), it_buffer->getRemetente());
+					// Mensagem enviada
+					it_buffer->setStatus(MsgStatus::MSG_ENTREGUE);
+					// Procura o usuario remetente
+
+					achar_remet = find(user.begin(), user.end(), remetente);
+					if (it_buffer->getRemetente() == achar_remet->getLogin())
+					{
+						// Remetente existe
+						// Testa se o remetente estah conectado
+						// Se sim, envia a confirmacao de entrega da mensagem
+
+						if (achar_remet->connected())
+						{
+							envioOK = (it_dest->write_int(CMD_MSG_ENTREGUE) == mysocket_status::SOCK_OK);
+							if (envioOK)
+								envioOK = (it_dest->write_int(it_buffer->getId()) == mysocket_status::SOCK_OK);
+
+							if (!envioOK)
+							{
+								cerr << "ERRO ao enviar mensagens do buffer para " << it_dest->getLogin() << "\n";
+								cerr << "ID: " << it_buffer->getId() << '\n';
+								it_dest->close();
+							}
+						}
+
+						imprimeComandoEnviado(it_buffer->getRemetente(), CMD_MSG_ENTREGUE, it_buffer->getId(), "");
+					}
+					else
+					{
+						// Remetente nao existe
+						// NUNCA deve ocorrer no servidor FAKE
+						cerr << "Remetente (" << it_buffer->getRemetente() << ") de uma msg armazenada nao existe\n";
+						it_dest->close();
+					}
+				}
+				else
+				{
+					// Nao conseguiu enviar para o destinatario
+					cerr << "Erro no envio de msg para destinatario " << it_dest->getLogin() << ". Desconectando\n";
+					it_dest->close();
+				}
+			}
+		}
+}
+
+/// Envia para o usuario as confirmacoes de visualizacao das mensagens
+/// que estejam arquivadas (doUsuario[]) com status MSG_LIDA
+/// e que tenham sido enviadas pelo usuario.
+/// Apos o envio da confirmacao, apaga a msg
+/// No servidor real deveria ser:
+/// Envia todas as confirmacoes de visualizacao das mensagens
+/// que estejam no buffer com status MSG_LIDA e que tenham sido enviadas
+/// pelo remetente para o qual o parametro iRemet aponta.
+/// Apos o envio das confirmacoes, remove as msgs do buffer
+/// void WhatsProgDadosServidor::enviarConfirmacoes(IterUsuario iRemet)
+void WhatsProgDadosServidor::enviarConfirmacoesParaUsuario(list<Usuario>::iterator it_remet)
+{
+	Mensagem M;
+	if (user.connected())
+		for (int i = 0; i < 2; i++)
+		{
+			M = doUsuario[i];
+			if (M.getRemetente() == user.getLogin() &&
+				M.getStatus() == MsgStatus::MSG_LIDA)
+			{
+				bool envioOK = (user.write_int(CMD_MSG_LIDA2) != mysocket_status::SOCK_ERROR);
+				if (envioOK)
+					envioOK = (user.write_int(M.getId()) != mysocket_status::SOCK_ERROR);
+				if (!envioOK)
+				{
+					cerr << "Erro no envio de confirmacao de visualizaco para remetente "
+						 << user.getLogin() << ". Desconectando\n";
+					user.close();
+				}
+				else
+				{
+					// A confirmacao de visualizacao foi enviada
+					imprimeComandoEnviado(user.getLogin(), CMD_MSG_LIDA2, M.getId());
+					// Remove a msg do buffer
+					doUsuario[i] = Mensagem();
+				}
+			}
+		}
+}
+
 /* **************************************************************************************
 ATENCAO: a parte a seguir da implementacao do servidor FAKE pode ser parcialmente adaptada
 para o servidor real, mas requer uma analise muito cuidadosa.
@@ -540,7 +654,7 @@ int WhatsProgDadosServidor::main_thread()
 						{
 							achar_login = find(user.begin(), user.end(), login);
 
-							if (achar_login != user.end())
+							if (achar_login == user.end())
 							{
 								cerr << "Login (" << login << ") nao existe. Desconectando\n";
 								login = "invalido";
