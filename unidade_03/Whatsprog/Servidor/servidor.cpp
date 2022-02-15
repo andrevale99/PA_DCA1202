@@ -172,7 +172,7 @@ void WhatsProgDadosServidor::closeSockets()
 /// e que sejam destinadas ao destinatario para o qual o parametro iDest aponta.
 /// Apos o envio, altera o status das msgs enviadas para MSG_ENTREGUE
 /// void WhatsProgDadosServidor::enviarRecebidas(IterUsuario iDest)
-void WhatsProgDadosServidor::enviarMsgsParaUsuario()
+void WhatsProgDadosServidor::enviarMsgsParaUsuario(const string &remet, const string &dest, const string &msg)
 {
 }
 
@@ -262,6 +262,7 @@ int WhatsProgDadosServidor::main_thread()
 					case CMD_ID_INVALIDA:
 					case CMD_USER_INVALIDO:
 					case CMD_MSG_INVALIDA:
+
 					case CMD_NOVA_MSG:
 					{
 						Mensagem msg;
@@ -332,7 +333,7 @@ int WhatsProgDadosServidor::main_thread()
 							msg_valida = false;
 						}
 
-						if(msg_valida && it_user->connected())
+						if (msg_valida && it_user->connected())
 						{
 							imprimeComandoRecebido(it_user->getLogin(), CMD_NOVA_MSG, id, dest);
 
@@ -353,8 +354,52 @@ int WhatsProgDadosServidor::main_thread()
 							{
 								imprimeComandoEnviado(it_user->getLogin(), CMD_MSG_RECEBIDA, id);
 							}
+
+							// Testa se o destinatario estah conectado
+							// Se sim, envia a mensagem e muda status para MSG_ENTREGUE
+							for (achar_dest = user.begin(); achar_dest != user.end(); ++achar_dest)
+							{
+								if (achar_dest->connected())
+								{
+									it_buffer = find(buffer.begin(), buffer.end(), dest);
+									if (it_buffer != buffer.end())
+									{
+										enviarMsgsParaUsuario(it_buffer->getRemetente(), it_buffer->getDestinatario(), it_buffer->getTexto());
+										it_buffer->setStatus(MsgStatus::MSG_ENTREGUE);
+									}
+								}
+							}
 						}
-					}
+
+						// Caso a mesagem nao eh valida
+						else
+						{
+							cerr << "ERRO na criacao da mensagem do " << it_user->getLogin() << ". ENVIANDO comando\n";
+							it_user->write_int(CMD_MSG_INVALIDA);
+						}
+						break;
+					} // Fim do case CMD_NOVA_MSG
+
+					case CMD_MSG_LIDA1:
+					{
+						string remetente;
+
+						iResult = it_user->read_int(id, TIMEOUT_WHATSPROG * 1000);
+						if (iResult == mysocket_status::SOCK_OK)
+							iResult = it_user->read_string(remetente, TIMEOUT_WHATSPROG * 1000);
+
+						it_buffer = find(buffer.begin(), buffer.end(), id);
+						if (it_buffer != buffer.end())
+						{
+							it_buffer = find(buffer.begin(), buffer.end(), remetente);
+							if (it_buffer!= buffer.end())
+							{
+								it_buffer->setStatus(MsgStatus::MSG_LIDA);
+							}
+						}
+
+					} // Fim do case CMD_MSG_LIDA1
+
 					default:
 					{
 						// Comando invalido
