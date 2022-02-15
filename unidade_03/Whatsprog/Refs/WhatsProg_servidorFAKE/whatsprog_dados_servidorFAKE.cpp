@@ -678,7 +678,7 @@ int WhatsProgDadosServidor::main_thread()
         // Aceita provisoriamente a nova conexao
         if (c.accept(t)!=mysocket_status::SOCK_OK)
         {
-          cerr << "Não foi possível estabelecer uma conexao\n";
+          cerr << "Nï¿½o foi possï¿½vel estabelecer uma conexao\n";
           t.close();
           // Encerra a thread do servidor
           fim = true;
