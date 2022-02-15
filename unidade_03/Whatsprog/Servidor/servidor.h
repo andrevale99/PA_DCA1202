@@ -86,12 +86,12 @@ private:
 	/// Envia para o usuario as mensagens que estejam arquivadas (paraUsuario[])
 	/// com status MSG_RECEBIDA e que seja destinada ao usuario.
 	/// Apos o envio, altera o status da msg enviada para MSG_ENTREGUE
-	void enviarMsgsParaUsuario();
+	void enviarMsgsParaUsuario(list<Usuario>::iterator it_dest);
 	/// Envia para o usuario as confirmacoes de visualizacao das mensagens
 	/// que estejam arquivadas (doUsuario[]) com status MSG_LIDA
 	/// e que tenha sido enviada pelo usuario.
 	/// Apos o envio da confirmacao, apaga a msg
-	void enviarConfirmacoesParaUsuario();
+	void enviarConfirmacoesParaUsuario(list<Usuario>::iterator it_remet);
 
 public:
 	/// Funcoes de acesso aas funcionalidades basicas dos sockets
