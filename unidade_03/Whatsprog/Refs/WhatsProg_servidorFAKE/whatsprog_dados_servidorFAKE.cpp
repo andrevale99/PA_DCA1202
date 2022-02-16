@@ -443,6 +443,7 @@ int WhatsProgDadosServidor::main_thread()
 			{
 				// Leh o comando recebido do cliente
 				iResult = user.read_int(cmd);
+				imprimeComandoRecebido(user.getLogin(), (ComandoWhatsProg)cmd);
 				if (iResult != mysocket_status::SOCK_OK)
 				{
 					// Pode ser mysocket_status::SOCK_TIMEOUT, mysocket_status::SOCK_DISCONNECTED ou mysocket_status::SOCK_ERRO
@@ -699,6 +700,7 @@ int WhatsProgDadosServidor::main_thread()
 				if (t.connected())
 				{
 					iResult = t.read_int(cmd, TIMEOUT_LOGIN_WHATSPROG * 1000);
+					cout << "cmd: " << cmd << '\n';
 					if (iResult != mysocket_status::SOCK_OK)
 					{
 						// Pode ser mysocket_status::SOCK_TIMEOUT, mysocket_status::SOCK_DISCONNECTED ou mysocket_status::SOCK_ERRO
