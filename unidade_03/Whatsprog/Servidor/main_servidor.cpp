@@ -40,7 +40,7 @@ int main(void)
     exit(1);
   }
 
-  cout << "WhatsProg - SERVIDOR FAKE\n";
+  cout << "WhatsProg - SERVIDOR (FINAL)\n";
 
   if (DS.listen(PORTA_WHATSPROG) != mysocket_status::SOCK_OK)
   {

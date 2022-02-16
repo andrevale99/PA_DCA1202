@@ -83,12 +83,12 @@ private:
 	list<Mensagem> buffer;
 	list<Mensagem>::iterator it_buffer;
 
-	/// Envia para o usuario as mensagens que estejam arquivadas (paraUsuario[])
+	/// Envia para o usuario as mensagens que estejam arquivadas (list<Mensagem> buffer)
 	/// com status MSG_RECEBIDA e que seja destinada ao usuario.
 	/// Apos o envio, altera o status da msg enviada para MSG_ENTREGUE
 	void enviarMsgsParaUsuario(list<Usuario>::iterator it_dest);
 	/// Envia para o usuario as confirmacoes de visualizacao das mensagens
-	/// que estejam arquivadas (doUsuario[]) com status MSG_LIDA
+	/// que estejam arquivadas (list<Mensagem> buffer) com status MSG_LIDA
 	/// e que tenha sido enviada pelo usuario.
 	/// Apos o envio da confirmacao, apaga a msg
 	void enviarConfirmacoesParaUsuario(list<Usuario>::iterator it_remet);
