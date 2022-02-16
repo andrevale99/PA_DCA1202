@@ -1,4 +1,4 @@
-DADOS_CLIENTE 127.0.0.1 andrevale 0 1
-CONVERSA userfake2 1
-1 3 userfake2 andrevale
-Msg1
+DADOS_CLIENTE 127.0.0.1 andrevale 1 1
+CONVERSA luisbaja 1
+1 0 andrevale luisbaja
+12321445235

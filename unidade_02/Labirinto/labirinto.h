@@ -27,7 +27,7 @@ enum class EstadoCel
   CAMINHO
 };
 
-// Funcao para converter um estado de celula em uma string que o represente
+/* Funcao para converter um estado de celula em uma string que o represente */
 string estadoCel2string(EstadoCel E);
 
 /// A classe que armazena o mapa e os metodos de resolucao de labirintos
@@ -101,10 +101,10 @@ public:
 
   /// Testa se uma celula eh valida dentro das dimensoes de um mapa
   bool coordValida(const Coord& C) const;
-  /// Testa se uma celula estah livre (nao eh obstaculo) em um mapa
-  bool celulaLivre(const Coord& C) const;
-  /// Testa se um movimento Orig->Dest eh valido
-  bool movimentoValido(const Coord& Orig, const Coord& Dest) const;
+  /// Testa se uma celula eh valida e estah livre (nao eh obstaculo) em um mapa
+  bool celulaValidaLivre(const Coord& C) const;
+  /// Testa se um movimento MovDe->MovPara eh valido
+  bool movimentoValido(const Coord& MovDe, const Coord& MovPara) const;
 
   /// Fixa a origem do caminho a ser encontrado
   bool setOrigem(const Coord& C);

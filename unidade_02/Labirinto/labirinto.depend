@@ -1,0 +1,132 @@
+# depslib dependency file v1.0
+1627326204 source:c:\users\lf-lu\desktop\labirinto-incompleto\coord.cpp
+	<cmath>
+	"coord.h"
+
+1627326236 c:\users\lf-lu\desktop\labirinto-incompleto\coord.h
+	<iostream>
+
+1638990870 source:c:\users\lf-lu\desktop\labirinto-incompleto\labirinto.cpp
+	<iomanip>
+	<fstream>
+	<list>
+	<algorithm>
+	"noh.h"
+	"labirinto.h"
+
+1638986379 c:\users\lf-lu\desktop\labirinto-incompleto\labirinto.h
+	<vector>
+	"coord.h"
+
+1628187033 source:c:\users\lf-lu\desktop\labirinto-incompleto\labirinto_main.cpp
+	<iostream>
+	<iomanip>
+	<chrono>
+	"labirinto.h"
+
+1638988421 source:c:\users\lf-lu\desktop\labirinto-incompleto\noh.cpp
+	"noh.h"
+	<cmath>
+
+1638986967 c:\users\lf-lu\desktop\labirinto-incompleto\noh.h
+	"coord.h"
+
+1627326204 source:c:\users\lf-lu\desktop\labirinto-erro_arquivo\coord.cpp
+	<cmath>
+	"coord.h"
+
+1627326236 c:\users\lf-lu\desktop\labirinto-erro_arquivo\coord.h
+	<iostream>
+
+1638996630 source:c:\users\lf-lu\desktop\labirinto-erro_arquivo\labirinto.cpp
+	<iomanip>
+	<fstream>
+	<list>
+	<deque>
+	<algorithm>
+	"noh.h"
+	"labirinto.h"
+
+1638986967 c:\users\lf-lu\desktop\labirinto-erro_arquivo\noh.h
+	"coord.h"
+
+1638986379 c:\users\lf-lu\desktop\labirinto-erro_arquivo\labirinto.h
+	<vector>
+	"coord.h"
+
+1628187033 source:c:\users\lf-lu\desktop\labirinto-erro_arquivo\labirinto_main.cpp
+	<iostream>
+	<iomanip>
+	<chrono>
+	"labirinto.h"
+
+1639015223 source:c:\users\lf-lu\desktop\labirinto-erro_arquivo\noh.cpp
+	"noh.h"
+	<cmath>
+
+1627326204 source:c:\users\lf-lu\desktop\labirinto-ok\coord.cpp
+	<cmath>
+	"coord.h"
+
+1627326236 c:\users\lf-lu\desktop\labirinto-ok\coord.h
+	<iostream>
+
+1628187033 source:c:\users\lf-lu\desktop\labirinto-ok\labirinto_main.cpp
+	<iostream>
+	<iomanip>
+	<chrono>
+	"labirinto.h"
+
+1638986379 c:\users\lf-lu\desktop\labirinto-ok\labirinto.h
+	<vector>
+	"coord.h"
+
+1639015223 source:c:\users\lf-lu\desktop\labirinto-ok\noh.cpp
+	"noh.h"
+	<cmath>
+
+1638986967 c:\users\lf-lu\desktop\labirinto-ok\noh.h
+	"coord.h"
+
+1639016890 source:c:\users\lf-lu\desktop\labirinto-ok\labirinto.cpp
+	<iomanip>
+	<fstream>
+	<list>
+	<deque>
+	<algorithm>
+	"noh.h"
+	"labirinto.h"
+
+1627326204 source:c:\users\lf-lu\documents\ufrn temporário\2021.3\prog. avançada\projeto 2 - labirinto\labirinto-ok\coord.cpp
+	<cmath>
+	"coord.h"
+
+1627326236 c:\users\lf-lu\documents\ufrn temporário\2021.3\prog. avançada\projeto 2 - labirinto\labirinto-ok\coord.h
+	<iostream>
+
+1639016890 source:c:\users\lf-lu\documents\ufrn temporário\2021.3\prog. avançada\projeto 2 - labirinto\labirinto-ok\labirinto.cpp
+	<iomanip>
+	<fstream>
+	<list>
+	<deque>
+	<algorithm>
+	"noh.h"
+	"labirinto.h"
+
+1638986967 c:\users\lf-lu\documents\ufrn temporário\2021.3\prog. avançada\projeto 2 - labirinto\labirinto-ok\noh.h
+	"coord.h"
+
+1638986379 c:\users\lf-lu\documents\ufrn temporário\2021.3\prog. avançada\projeto 2 - labirinto\labirinto-ok\labirinto.h
+	<vector>
+	"coord.h"
+
+1628187033 source:c:\users\lf-lu\documents\ufrn temporário\2021.3\prog. avançada\projeto 2 - labirinto\labirinto-ok\labirinto_main.cpp
+	<iostream>
+	<iomanip>
+	<chrono>
+	"labirinto.h"
+
+1639015223 source:c:\users\lf-lu\documents\ufrn temporário\2021.3\prog. avançada\projeto 2 - labirinto\labirinto-ok\noh.cpp
+	"noh.h"
+	<cmath>
+
