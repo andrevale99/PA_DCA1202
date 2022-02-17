@@ -40,4 +40,4 @@ FORMS    += \
     whatsprog_novaconversa.ui
 
 LIBS   += \
-    -lWs2_32
+    #-lWs2_32

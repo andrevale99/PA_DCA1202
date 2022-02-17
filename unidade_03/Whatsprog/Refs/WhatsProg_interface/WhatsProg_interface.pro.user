@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.1, 2022-02-09T10:06:50. -->
+<!-- Written by QtCreator 6.0.1, 2022-02-16T15:23:37. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -238,8 +238,9 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/andre/Desktop/Git/Projetos_PA_DCA1202/unidade_03/Whatsprog/WhatsProg_interface/WhatsProg_interface.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/andre/Desktop/Git/Projetos_PA_DCA1202/unidade_03/Whatsprog/WhatsProg_interface/WhatsProg_interface.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">WhatsProg_interface2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/andre/Desktop/Git/Projetos_PA_DCA1202/unidade_03/Whatsprog/Refs/WhatsProg_interface/WhatsProg_interface.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/andre/Desktop/Git/Projetos_PA_DCA1202/unidade_03/Whatsprog/Refs/WhatsProg_interface/WhatsProg_interface.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
