@@ -6,7 +6,22 @@
 #include <thread>
 #include <QMessageBox>
 #include <cstdio>
-//#include "whatsprog_dados_cliente.h"
+#include <cstdlib>
+#include "whatsprog_dados_cliente.h"
+
+/***
+ *
+ * DUPLA: Andre Menezes de Freitas Vale
+ *        Luis Filipe Silva da Costa
+ *
+ * SISTEMA OPERACIONAL USADO: LINUX
+ *
+ * Caso queira roda no Windows
+ * 1. Descomentar no ".pro" o link "-lWs2_32"
+ * 2. Descomentar as partes para rodar no Windows nos arquivos "mysocket.h" e "mysocket.cpp"
+ *
+ */
+
 
 using namespace std;
 
@@ -63,8 +78,10 @@ WhatsProgMain::WhatsProgMain(QWidget *parent) :
 
   // Os icones do status das mensagens
   //QString dir = ".\\"; //No windows
-  QString dir = "/home/andre/Downloads/WhatsProg_interface/";
+  QString dir = "./";
   QString pixfile;
+
+  system("pwd");
 
   pixfile = dir+"status0.png";
   if (!pixEnviada.load(pixfile,"PNG"))

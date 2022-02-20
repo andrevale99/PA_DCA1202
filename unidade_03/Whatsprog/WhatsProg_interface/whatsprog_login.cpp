@@ -3,6 +3,19 @@
 #include "whatsprog_main.h"
 #include <qmessagebox.h>
 
+/***
+ *
+ * DUPLA: Andre Menezes de Freitas Vale
+ *        Luis Filipe Silva da Costa
+ *
+ * SISTEMA OPERACIONAL USADO: LINUX
+ *
+ * Caso queira roda no Windows
+ * 1. Descomentar no ".pro" o link "-lWs2_32"
+ * 2. Descomentar as partes para rodar no Windows nos arquivos "mysocket.h" e "mysocket.cpp"
+ *
+ */
+
 WhatsProgLogin::WhatsProgLogin(QWidget *parent) :
   QDialog(parent),
   ui(new Ui::WhatsProgLogin)
